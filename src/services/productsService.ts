@@ -2,7 +2,12 @@
  * 商品関連サービス
  */
 import api from "./api";
-import { Product, PaginationParams, FilterParams, APIResponse } from "@/types";
+import { Product, PaginationParams, FilterParams, APIResponse, ECPlatform } from "@/types";
+import { 
+  createProductsEndpoint, 
+  createProductDetailEndpoint,
+  createSyncEndpoint 
+} from "./endpoints";
 
 interface ProductsResponse {
   items: Product[];
@@ -22,17 +27,18 @@ class ProductsService {
     pagination: PaginationParams,
     filters: FilterParams,
   ): Promise<ProductsResponse> {
-    const params = {
-      page: pagination.page,
-      per_page: pagination.perPage,
-      sort_by: pagination.sortBy,
-      sort_order: pagination.sortOrder,
-      ...filters,
-    };
+    // エンドポイントビルダーを使用
+    const endpoint = createProductsEndpoint()
+      .withQueryParams({
+        page: pagination.page,
+        per_page: pagination.perPage,
+        sort_by: pagination.sortBy,
+        sort_order: pagination.sortOrder,
+        ...filters,
+      })
+      .build();
 
-    const response = await api.get<APIResponse<ProductsResponse>>("/products", {
-      params,
-    });
+    const response = await api.get<APIResponse<ProductsResponse>>(endpoint);
 
     if (response.success && response.data) {
       return response.data;
@@ -45,7 +51,10 @@ class ProductsService {
    * 商品詳細取得
    */
   async getProductById(id: string): Promise<Product> {
-    const response = await api.get<APIResponse<Product>>(`/products/${id}`);
+    // エンドポイントビルダーを使用
+    const endpoint = createProductDetailEndpoint(id).build();
+
+    const response = await api.get<APIResponse<Product>>(endpoint);
 
     if (response.success && response.data) {
       return response.data;
@@ -58,7 +67,10 @@ class ProductsService {
    * 商品作成
    */
   async createProduct(data: Partial<Product>): Promise<Product> {
-    const response = await api.post<APIResponse<Product>>("/products", data);
+    // エンドポイントビルダーを使用
+    const endpoint = createProductsEndpoint().build();
+
+    const response = await api.post<APIResponse<Product>>(endpoint, data);
 
     if (response.success && response.data) {
       return response.data;
@@ -71,10 +83,10 @@ class ProductsService {
    * 商品更新
    */
   async updateProduct(id: string, data: Partial<Product>): Promise<Product> {
-    const response = await api.put<APIResponse<Product>>(
-      `/products/${id}`,
-      data,
-    );
+    // エンドポイントビルダーを使用
+    const endpoint = createProductDetailEndpoint(id).build();
+
+    const response = await api.put<APIResponse<Product>>(endpoint, data);
 
     if (response.success && response.data) {
       return response.data;
@@ -87,7 +99,10 @@ class ProductsService {
    * 商品削除
    */
   async deleteProduct(id: string): Promise<void> {
-    const response = await api.delete<APIResponse<void>>(`/products/${id}`);
+    // エンドポイントビルダーを使用
+    const endpoint = createProductDetailEndpoint(id).build();
+
+    const response = await api.delete<APIResponse<void>>(endpoint);
 
     if (!response.success) {
       throw new Error(response.error?.message || "商品の削除に失敗しました");
@@ -97,10 +112,11 @@ class ProductsService {
   /**
    * 商品同期
    */
-  async syncProducts(platform: string): Promise<ProductsResponse> {
-    const response = await api.post<APIResponse<ProductsResponse>>(
-      `/products/sync/${platform}`,
-    );
+  async syncProducts(platform: ECPlatform): Promise<ProductsResponse> {
+    // エンドポイントビルダーを使用
+    const endpoint = createSyncEndpoint("products", platform).build();
+
+    const response = await api.post<APIResponse<ProductsResponse>>(endpoint);
 
     if (response.success && response.data) {
       return response.data;
@@ -116,11 +132,16 @@ class ProductsService {
     format: "csv" | "excel",
     filters?: FilterParams,
   ): Promise<Blob> {
-    const response = await api.get("/products/export", {
-      params: {
+    // エンドポイントビルダーを使用
+    const endpoint = createProductsEndpoint()
+      .withSubResource("export")
+      .withQueryParams({
         format,
         ...filters,
-      },
+      })
+      .build();
+
+    const response = await api.get(endpoint, {
       responseType: "blob",
     });
 
@@ -132,15 +153,20 @@ class ProductsService {
    */
   async importProducts(
     file: File,
-    platform: string,
+    platform: ECPlatform,
   ): Promise<{ imported: number; errors: any[] }> {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("platform", platform);
 
+    // エンドポイントビルダーを使用
+    const endpoint = createProductsEndpoint()
+      .withSubResource("import")
+      .build();
+
     const response = await api.post<
       APIResponse<{ imported: number; errors: any[] }>
-    >("/products/import", formData, {
+    >(endpoint, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -162,8 +188,13 @@ class ProductsService {
     const formData = new FormData();
     formData.append("image", file);
 
+    // エンドポイントビルダーを使用
+    const endpoint = createProductDetailEndpoint(productId)
+      .withSubResource("images")
+      .build();
+
     const response = await api.post<APIResponse<{ url: string }>>(
-      `/products/${productId}/images`,
+      endpoint,
       formData,
       {
         headers: {
@@ -185,8 +216,13 @@ class ProductsService {
    * 商品画像削除
    */
   async deleteImage(productId: string, imageUrl: string): Promise<void> {
+    // エンドポイントビルダーを使用
+    const endpoint = createProductDetailEndpoint(productId)
+      .withSubResource("images")
+      .build();
+
     const response = await api.delete<APIResponse<void>>(
-      `/products/${productId}/images`,
+      endpoint,
       {
         data: { imageUrl },
       },
@@ -204,8 +240,13 @@ class ProductsService {
     productId: string,
     inventory: number,
   ): Promise<Product> {
+    // エンドポイントビルダーを使用
+    const endpoint = createProductDetailEndpoint(productId)
+      .withSubResource("inventory")
+      .build();
+
     const response = await api.patch<APIResponse<Product>>(
-      `/products/${productId}/inventory`,
+      endpoint,
       { inventory },
     );
 
@@ -223,8 +264,14 @@ class ProductsService {
     productIds: string[],
     status: "active" | "draft" | "archived",
   ): Promise<{ updated: number }> {
+    // エンドポイントビルダーを使用
+    const endpoint = createProductsEndpoint()
+      .withSubResource("bulk")
+      .withSubResource("status")
+      .build();
+
     const response = await api.post<APIResponse<{ updated: number }>>(
-      "/products/bulk/status",
+      endpoint,
       {
         productIds,
         status,
