@@ -77,7 +77,20 @@ export function createAmazonEndpoint(): EndpointBuilder {
  * Amazon特定リソースエンドポイントビルダーを作成
  */
 export function createAmazonResourceEndpoint(resource: "products" | "orders" | "inventory" | "reports"): EndpointBuilder {
-  const basePath = ENDPOINTS.AMAZON[resource.toUpperCase()] || `${ENDPOINTS.AMAZON.BASE}/${resource}`;
+  // リソースタイプに対応するパスを取得
+  let basePath = `${ENDPOINTS.AMAZON.BASE}/${resource}`;
+  
+  // リソースに対応する特定のパスが定義されている場合はそれを使用
+  if (resource === "products") {
+    basePath = ENDPOINTS.AMAZON.PRODUCTS;
+  } else if (resource === "orders") {
+    basePath = ENDPOINTS.AMAZON.ORDERS;
+  } else if (resource === "inventory") {
+    basePath = ENDPOINTS.AMAZON.INVENTORY;
+  } else if (resource === "reports") {
+    basePath = ENDPOINTS.AMAZON.REPORTS;
+  }
+  
   return new EndpointBuilder(basePath, API_VERSION);
 }
 
