@@ -2,20 +2,20 @@
  * Shopify GraphQLサービス
  * GraphQLを使用してShopify APIにアクセスするサービス
  */
-import graphqlClient from './GraphQLClient';
+import graphqlClient, { GraphQLClient } from './GraphQLClient';
 import { 
   createProductsGraphQLEndpoint, 
   createOrdersGraphQLEndpoint,
-  createCustomersGraphQLEndpoint
+  createCustomersGraphQLEndpoint,
+  createGraphQLEndpoint
 } from '../endpoints';
 
-/**
- * ページ情報インターフェース
- */
-interface PageInfo {
-  hasNextPage: boolean;
-  endCursor: string;
-}
+import { 
+  PageInfo, 
+  ProductsResponse, 
+  OrdersResponse, 
+  CustomersResponse 
+} from './schema';
 
 /**
  * ページネーション用パラメータ
@@ -29,6 +29,17 @@ interface PaginationParams {
  * Shopify GraphQL APIサービスクラス
  */
 class ShopifyGraphQLService {
+  private client: GraphQLClient;
+  private endpoint: string;
+  
+  /**
+   * コンストラクタ
+   * @param endpoint カスタムGraphQLエンドポイント (デフォルトはグローバルクライアントを使用)
+   */
+  constructor(endpoint?: string) {
+    this.endpoint = endpoint || '/api/graphql';
+    this.client = endpoint ? new GraphQLClient(endpoint) : graphqlClient;
+  }
   /**
    * 商品一覧を取得
    * @param params ページネーションパラメータ
@@ -37,31 +48,11 @@ class ShopifyGraphQLService {
   async getProducts(params: PaginationParams = { first: 20 }) {
     const { first = 20, after } = params;
     
-    const endpoint = createProductsGraphQLEndpoint({ first, after });
-    const result = await graphqlClient.execute<{
-      products: {
-        edges: Array<{
-          node: {
-            id: string;
-            title: string;
-            description: string;
-            createdAt: string;
-            updatedAt: string;
-            tags: string[];
-            variants: {
-              edges: Array<{
-                node: {
-                  id: string;
-                  price: string;
-                  inventoryQuantity: number;
-                }
-              }>
-            }
-          }
-        }>;
-        pageInfo: PageInfo;
-      }
-    }>(endpoint.build());
+    const endpoint = createGraphQLEndpoint(this.endpoint)
+      .withQuery(createProductsGraphQLEndpoint({ first, after }).build().query)
+      .withVariables({ first, after });
+      
+    const result = await this.client.execute<ProductsResponse>(endpoint.build());
     
     // データを整形して返却
     const products = result.products.edges.map(edge => edge.node);
@@ -81,29 +72,11 @@ class ShopifyGraphQLService {
   async getOrders(params: PaginationParams = { first: 20 }) {
     const { first = 20, after } = params;
     
-    const endpoint = createOrdersGraphQLEndpoint({ first, after });
-    const result = await graphqlClient.execute<{
-      orders: {
-        edges: Array<{
-          node: {
-            id: string;
-            name: string;
-            processedAt: string;
-            financialStatus: string;
-            fulfillmentStatus: string;
-            totalPrice: string;
-            currencyCode: string;
-            customer: {
-              id: string;
-              email: string;
-              firstName: string;
-              lastName: string;
-            }
-          }
-        }>;
-        pageInfo: PageInfo;
-      }
-    }>(endpoint.build());
+    const endpoint = createGraphQLEndpoint(this.endpoint)
+      .withQuery(createOrdersGraphQLEndpoint({ first, after }).build().query)
+      .withVariables({ first, after });
+      
+    const result = await this.client.execute<OrdersResponse>(endpoint.build());
     
     // データを整形して返却
     const orders = result.orders.edges.map(edge => edge.node);
@@ -123,30 +96,11 @@ class ShopifyGraphQLService {
   async getCustomers(params: PaginationParams = { first: 20 }) {
     const { first = 20, after } = params;
     
-    const endpoint = createCustomersGraphQLEndpoint({ first, after });
-    const result = await graphqlClient.execute<{
-      customers: {
-        edges: Array<{
-          node: {
-            id: string;
-            email: string;
-            firstName: string;
-            lastName: string;
-            orders: {
-              edges: Array<{
-                node: {
-                  id: string;
-                  name: string;
-                  totalPrice: string;
-                  processedAt: string;
-                }
-              }>
-            }
-          }
-        }>;
-        pageInfo: PageInfo;
-      }
-    }>(endpoint.build());
+    const endpoint = createGraphQLEndpoint(this.endpoint)
+      .withQuery(createCustomersGraphQLEndpoint({ first, after }).build().query)
+      .withVariables({ first, after });
+      
+    const result = await this.client.execute<CustomersResponse>(endpoint.build());
     
     // データを整形して返却
     const customers = result.customers.edges.map(edge => edge.node);
@@ -165,7 +119,7 @@ class ShopifyGraphQLService {
    * @returns クエリ結果
    */
   async executeQuery<T = any>(query: string, variables?: Record<string, any>): Promise<T> {
-    return graphqlClient.query<T>(query, variables);
+    return this.client.query<T>(query, variables);
   }
   
   /**
@@ -175,7 +129,16 @@ class ShopifyGraphQLService {
    * @returns ミューテーション結果
    */
   async executeMutation<T = any>(mutation: string, variables?: Record<string, any>): Promise<T> {
-    return graphqlClient.mutate<T>(mutation, variables);
+    return this.client.mutate<T>(mutation, variables);
+  }
+  
+  /**
+   * カスタムエンドポイントを設定
+   * @param endpoint GraphQLエンドポイントURL
+   */
+  setEndpoint(endpoint: string): void {
+    this.endpoint = endpoint;
+    this.client = new GraphQLClient(endpoint);
   }
 }
 
