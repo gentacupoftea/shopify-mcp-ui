@@ -4,6 +4,11 @@
  */
 import graphqlClient, { GraphQLClient } from './GraphQLClient';
 import { 
+  checkWritePermission, 
+  createWriteBlockedError,
+  logApiOperation 
+} from '../../config/api-security';
+import { 
   createProductsGraphQLEndpoint, 
   createOrdersGraphQLEndpoint,
   createCustomersGraphQLEndpoint,
@@ -126,10 +131,24 @@ class ShopifyGraphQLService {
    * カスタムGraphQLミューテーションを実行
    * @param mutation GraphQLミューテーション
    * @param variables ミューテーション変数
+   * @param operationName 操作名
    * @returns ミューテーション結果
    */
-  async executeMutation<T = any>(mutation: string, variables?: Record<string, any>): Promise<T> {
-    return this.client.mutate<T>(mutation, variables);
+  async executeMutation<T = any>(
+    mutation: string, 
+    variables?: Record<string, any>,
+    operationName: string = 'executeMutation'
+  ): Promise<T> {
+    // 書き込み権限のチェック
+    const isAllowed = checkWritePermission('shopify', operationName);
+    logApiOperation('shopify', 'MUTATION', operationName, isAllowed);
+    
+    // 権限が無い場合はエラーをスロー
+    if (!isAllowed) {
+      throw createWriteBlockedError('shopify', operationName);
+    }
+    
+    return this.client.mutate<T>(mutation, variables, undefined, operationName);
   }
   
   /**

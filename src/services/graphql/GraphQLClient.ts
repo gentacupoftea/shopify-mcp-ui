@@ -3,6 +3,11 @@
  * GraphQLリクエストを処理するためのシンプルなクライアント
  */
 import axios, { AxiosRequestConfig } from 'axios';
+import { 
+  checkWritePermission, 
+  createWriteBlockedError, 
+  logApiOperation 
+} from '../../config/api-security';
 import { GraphQLRequest } from '../endpoints/GraphQLEndpointBuilder';
 
 /**
@@ -153,17 +158,28 @@ export class GraphQLClient {
    * @param mutation GraphQLミューテーション
    * @param variables 変数
    * @param config Axiosの追加設定
+   * @param operationName 操作名（セキュリティチェック用）
    * @returns レスポンスデータ
    */
   public async mutate<T = any>(
     mutation: string,
     variables?: Record<string, any>,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
+    operationName: string = 'mutation'
   ): Promise<T> {
+    // 書き込み権限のチェック
+    const isAllowed = checkWritePermission('shopify', operationName);
+    logApiOperation('shopify', 'MUTATION', operationName, isAllowed);
+    
+    // 権限が無い場合はエラーをスロー
+    if (!isAllowed) {
+      throw createWriteBlockedError('shopify', operationName);
+    }
+    
     const request: GraphQLRequest = {
       endpoint: this.defaultEndpoint,
       operationType: 'mutation',
-      operationName: '',
+      operationName: operationName || '',
       query: mutation,
       variables: variables || {},
       headers: {}
