@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "conea-app"
+  },
+  "targets": {
+    "conea-app": {
+      "hosting": {
+        "production": [
+          "conea-app"
+        ]
+      }
+    }
+  }
+}
