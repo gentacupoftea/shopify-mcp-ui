@@ -1,8 +1,8 @@
 /**
  * ダッシュボード状態管理スライス
  */
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Widget, ChartData } from "../../types";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Widget, ChartData } from '../../types';
 
 interface DashboardState {
   widgets: Widget[];
@@ -47,7 +47,7 @@ const initialState: DashboardState = {
 };
 
 const dashboardSlice = createSlice({
-  name: "dashboard",
+  name: 'dashboard',
   initialState,
   reducers: {
     setWidgets: (state, action: PayloadAction<Widget[]>) => {
@@ -58,35 +58,32 @@ const dashboardSlice = createSlice({
     },
     removeWidget: (state, action: PayloadAction<string>) => {
       state.widgets = state.widgets.filter(
-        (widget) => widget.id !== action.payload,
+        (widget) => widget.id !== action.payload
       );
     },
     updateWidget: (state, action: PayloadAction<Widget>) => {
       const index = state.widgets.findIndex(
-        (widget) => widget.id === action.payload.id,
+        (widget) => widget.id === action.payload.id
       );
       if (index !== -1) {
         state.widgets[index] = action.payload;
       }
     },
-    setMetrics: (
-      state,
-      action: PayloadAction<Partial<DashboardState["metrics"]>>,
-    ) => {
+    setMetrics: (state, action: PayloadAction<Partial<DashboardState['metrics']>>) => {
       state.metrics = { ...state.metrics, ...action.payload };
     },
     setChartData: (
       state,
       action: PayloadAction<{
-        type: keyof DashboardState["chartData"];
+        type: keyof DashboardState['chartData'];
         data: ChartData;
-      }>,
+      }>
     ) => {
       state.chartData[action.payload.type] = action.payload.data;
     },
     setDateRange: (
       state,
-      action: PayloadAction<{ start: Date; end: Date }>,
+      action: PayloadAction<{ start: Date; end: Date }>
     ) => {
       state.dateRange = action.payload;
     },

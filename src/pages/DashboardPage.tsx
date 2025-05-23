@@ -1,13 +1,13 @@
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import {
   CurrencyDollarIcon,
   ShoppingCartIcon,
   UserGroupIcon,
   ArrowTrendingUpIcon,
-} from "@heroicons/react/24/outline";
-import KpiCard from "../components/dashboard/KpiCard";
-import api from "../services/api";
+} from '@heroicons/react/24/outline';
+import KpiCard from '../components/dashboard/KpiCard';
+import api from '../services/api';
 import {
   LineChart,
   Line,
@@ -19,12 +19,12 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from "recharts";
+} from 'recharts';
 
 const DashboardPage: React.FC = () => {
   // Fetch dashboard data
   const { data: dashboardData, isLoading } = useQuery({
-    queryKey: ["dashboard"],
+    queryKey: ['dashboard'],
     queryFn: async () => {
       // Temporarily return mock data while API is not available
       return {
@@ -38,29 +38,27 @@ const DashboardPage: React.FC = () => {
 
   // Mock data for charts
   const salesData = [
-    { date: "Mon", sales: 4000 },
-    { date: "Tue", sales: 3000 },
-    { date: "Wed", sales: 2000 },
-    { date: "Thu", sales: 2780 },
-    { date: "Fri", sales: 1890 },
-    { date: "Sat", sales: 2390 },
-    { date: "Sun", sales: 3490 },
+    { date: 'Mon', sales: 4000 },
+    { date: 'Tue', sales: 3000 },
+    { date: 'Wed', sales: 2000 },
+    { date: 'Thu', sales: 2780 },
+    { date: 'Fri', sales: 1890 },
+    { date: 'Sat', sales: 2390 },
+    { date: 'Sun', sales: 3490 },
   ];
 
   const productData = [
-    { name: "Product A", sales: 4000 },
-    { name: "Product B", sales: 3000 },
-    { name: "Product C", sales: 2000 },
-    { name: "Product D", sales: 2780 },
-    { name: "Product E", sales: 1890 },
+    { name: 'Product A', sales: 4000 },
+    { name: 'Product B', sales: 3000 },
+    { name: 'Product C', sales: 2000 },
+    { name: 'Product D', sales: 2780 },
+    { name: 'Product E', sales: 1890 },
   ];
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
-          Dashboard
-        </h1>
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Dashboard</h1>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Overview of your store's performance
         </p>

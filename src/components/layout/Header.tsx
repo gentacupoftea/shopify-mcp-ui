@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   AppBar,
   Toolbar,
@@ -9,7 +9,8 @@ import {
   Menu,
   MenuItem,
   Divider,
-} from "@mui/material";
+  Tooltip,
+} from '@mui/material';
 import {
   Bars3Icon as MenuIcon,
   UserIcon,
@@ -17,14 +18,16 @@ import {
   ArrowRightOnRectangleIcon,
   SunIcon,
   MoonIcon,
-} from "@heroicons/react/24/outline";
-import { useTranslation } from "react-i18next";
-import { useAuth } from "../../contexts/MockAuthContext";
-import { NotificationPopup } from "../notifications/NotificationPopup";
-import { LanguageSwitcher } from "../common/LanguageSwitcher";
-import { useTheme } from "../../hooks";
-import { useNavigate } from "react-router-dom";
-import { ConeaLogo } from "../branding/ConeaLogo";
+  ServerIcon,
+} from '@heroicons/react/24/outline';
+import { useAuth } from '../../contexts/MockAuthContext';
+import { EnhancedNotificationPopup } from '../notifications';
+import { OfflineIndicator } from '../offline';
+import { useTheme } from '../../hooks';
+import { useNavigate } from 'react-router-dom';
+import { ConeaLogo } from '../branding/ConeaLogo';
+import { ConnectionStatus } from '../Connection';
+import { useConnectionContext } from '../../contexts/ConnectionContext';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -35,7 +38,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, isMobile = false }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { toggleTheme, theme } = useTheme();
-  const { t } = useTranslation();
+  const { isConnected, apiStatus, wsStatus } = useConnectionContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -52,13 +55,17 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, isMobile = false }) => {
   };
 
   const handleProfile = () => {
-    navigate("/profile");
+    navigate('/profile');
     handleProfileMenuClose();
   };
 
   const handleSettings = () => {
-    navigate("/settings");
+    navigate('/settings');
     handleProfileMenuClose();
+  };
+  
+  const handleServerConnection = () => {
+    navigate('/server-connection');
   };
 
   return (
@@ -66,53 +73,45 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, isMobile = false }) => {
       position="fixed"
       sx={{
         zIndex: (theme) => theme.zIndex.drawer + 1,
-        background:
-          theme.palette.mode === "dark"
-            ? "linear-gradient(135deg, #1a1a1a 0%, #111111 100%)"
-            : "linear-gradient(135deg, #86EFAC 0%, #6EE7B7 100%)",
+        background: theme.palette.mode === 'dark' 
+          ? 'linear-gradient(135deg, #1a1a1a 0%, #111111 100%)' 
+          : 'linear-gradient(135deg, #86EFAC 0%, #6EE7B7 100%)',
         color: theme.palette.primary.contrastText,
-        backdropFilter: "blur(10px)",
-        borderBottom: `1px solid ${theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.2)"}`,
+        backdropFilter: 'blur(10px)',
+        borderBottom: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.2)'}`,
       }}
       elevation={0}
     >
       <Toolbar>
-        <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
-          <ConeaLogo
-            variant={isMobile ? "icon-only" : "horizontal"}
+        <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+          <ConeaLogo 
+            variant={isMobile ? 'icon-only' : 'horizontal'}
             size="md"
             showTagline={!isMobile}
           />
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          {/* 言語切替 */}
-          <LanguageSwitcher variant="menu" size="small" showLabel={!isMobile} />
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          {/* サーバー接続状態 */}
+          <Tooltip title="Server Connection Settings">
+            <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={handleServerConnection}>
+              <ConnectionStatus variant="badge" />
+            </Box>
+          </Tooltip>
+
+          {/* オフライン状態表示 */}
+          <OfflineIndicator />
 
           {/* テーマ切り替えボタン */}
-          <IconButton
-            onClick={toggleTheme}
-            color="inherit"
-            aria-label={
-              theme.palette.mode === "dark"
-                ? t("settings.lightMode")
-                : t("settings.darkMode")
+          <IconButton onClick={toggleTheme} color="inherit">
+            {theme.palette.mode === 'dark' ? 
+              <SunIcon className="h-5 w-5" style={{ color: '#FFFFFF' }} /> : 
+              <MoonIcon className="h-5 w-5" />
             }
-            data-testid="theme-toggle"
-          >
-            {theme.palette.mode === "dark" ? (
-              <SunIcon
-                className="h-5 w-5"
-                style={{ color: "#FFFFFF" }}
-                aria-hidden="true"
-              />
-            ) : (
-              <MoonIcon className="h-5 w-5" aria-hidden="true" />
-            )}
           </IconButton>
 
           {/* 通知ボタン */}
-          <NotificationPopup />
+          <EnhancedNotificationPopup />
 
           {/* プロフィールメニュー */}
           <IconButton
@@ -123,7 +122,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, isMobile = false }) => {
             color="inherit"
           >
             <Avatar sx={{ width: 32, height: 32 }}>
-              {user?.name?.charAt(0) || "U"}
+              {user?.name?.charAt(0) || 'U'}
             </Avatar>
           </IconButton>
 
@@ -142,13 +141,13 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, isMobile = false }) => {
             id="menu-appbar"
             anchorEl={anchorEl}
             anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
+              vertical: 'bottom',
+              horizontal: 'right',
             }}
             keepMounted
             transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
+              vertical: 'top',
+              horizontal: 'right',
             }}
             open={Boolean(anchorEl)}
             onClose={handleProfileMenuClose}
@@ -162,16 +161,16 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, isMobile = false }) => {
             <Divider />
             <MenuItem onClick={handleProfile}>
               <UserIcon className="h-5 w-5 mr-2" />
-              {t("navigation.profile")}
+              プロフィール
             </MenuItem>
             <MenuItem onClick={handleSettings}>
               <CogIcon className="h-5 w-5 mr-2" />
-              {t("navigation.settings")}
+              設定
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleLogout}>
               <ArrowRightOnRectangleIcon className="h-5 w-5 mr-2" />
-              {t("auth.logout")}
+              ログアウト
             </MenuItem>
           </Menu>
         </Box>

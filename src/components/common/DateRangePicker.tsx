@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Calendar } from "lucide-react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React, { useState } from 'react';
+import { Calendar } from 'lucide-react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface DateRangePickerProps {
   startDate: Date;
@@ -34,7 +34,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
           {startDate.toLocaleDateString()} - {endDate.toLocaleDateString()}
         </span>
       </button>
-
+      
       {isOpen && (
         <div className="absolute top-12 right-0 z-50">
           <DatePicker

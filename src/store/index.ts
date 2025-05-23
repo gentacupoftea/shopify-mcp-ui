@@ -1,13 +1,13 @@
 /**
  * Redux Store設定
  */
-import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./slices/authSlice";
-import settingsReducer from "./slices/settingsSlice";
-import dashboardReducer from "./slices/dashboardSlice";
-import productsReducer from "./slices/productsSlice";
-import ordersReducer from "./slices/ordersSlice";
-import notificationsReducer from "./slices/notificationsSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import authReducer from './slices/authSlice';
+import settingsReducer from './slices/settingsSlice';
+import dashboardReducer from './slices/dashboardSlice';
+import productsReducer from './slices/productsSlice';
+import ordersReducer from './slices/ordersSlice';
+import notificationsReducer from './slices/notificationsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -21,8 +21,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActionPaths: ["meta.arg", "payload.timestamp"],
-        ignoredPaths: ["items.dates"],
+        ignoredActionPaths: ['meta.arg', 'payload.timestamp'],
+        ignoredPaths: ['items.dates'],
       },
     }),
 });

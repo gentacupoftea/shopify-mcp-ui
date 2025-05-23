@@ -2,22 +2,12 @@
  * 検索バーコンポーネント
  * フィルターオプション付きの高度な検索UI
  */
-import React, { useState } from "react";
-import {
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
-  Chip,
-  Popover,
-  Fade,
-  Typography,
-  Checkbox,
-} from "@mui/material";
-import { Search, FilterList, Clear } from "@mui/icons-material";
-import { Input, Button } from "../../atoms";
-import { useDebounce } from "../../hooks";
-import { ECPlatform } from "../../types";
+import React, { useState } from 'react';
+import { Box, IconButton, Menu, MenuItem, Chip, Popover, Fade, Typography, Checkbox } from '@mui/material';
+import { Search, FilterList, Clear } from '@mui/icons-material';
+import { Input, Button } from '../../atoms';
+import { useDebounce } from '../../hooks';
+import { ECPlatform } from '../../types';
 
 export interface SearchBarProps {
   placeholder?: string;
@@ -34,17 +24,17 @@ export interface SearchBarProps {
 }
 
 const platformLabels: Record<ECPlatform, string> = {
-  shopify: "Shopify",
-  rakuten: "楽天",
-  amazon: "Amazon",
-  yahoo: "Yahoo!",
-  base: "BASE",
-  mercari: "メルカリ",
+  shopify: 'Shopify',
+  rakuten: '楽天',
+  amazon: 'Amazon',
+  yahoo: 'Yahoo!',
+  base: 'BASE',
+  mercari: 'メルカリ',
 };
 
 export const SearchBar: React.FC<SearchBarProps> = ({
-  placeholder = "検索...",
-  value: propValue = "",
+  placeholder = '検索...',
+  value: propValue = '',
   onChange,
   onSearch,
   filters = {},
@@ -63,13 +53,13 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   }, [debouncedValue, onChange, propValue]);
 
   const handleClear = () => {
-    setLocalValue("");
-    onChange?.("");
-    onSearch?.("");
+    setLocalValue('');
+    onChange?.('');
+    onSearch?.('');
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && onSearch) {
+    if (e.key === 'Enter' && onSearch) {
       onSearch(localValue);
     }
   };
@@ -81,8 +71,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   ].reduce((sum, count) => sum + count, 0);
 
   return (
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1, width: "100%" }}>
-      <Box sx={{ flex: 1, position: "relative" }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
+      <Box sx={{ flex: 1, position: 'relative' }}>
         <Input
           value={localValue}
           onChange={(e) => setLocalValue(e.target.value)}
@@ -96,10 +86,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               </IconButton>
             )
           }
-          sx={{ width: "100%" }}
+          sx={{ width: '100%' }}
         />
       </Box>
-
+      
       {showFilters && (
         <>
           <Button
@@ -118,7 +108,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               />
             )}
           </Button>
-
+          
           <Menu
             anchorEl={filterAnchor}
             open={Boolean(filterAnchor)}
@@ -137,15 +127,13 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 onClick={() => {
                   const platforms = filters.platforms || [];
                   const newPlatforms = platforms.includes(key as ECPlatform)
-                    ? platforms.filter((p) => p !== key)
+                    ? platforms.filter(p => p !== key)
                     : [...platforms, key as ECPlatform];
                   onFilterChange?.({ ...filters, platforms: newPlatforms });
                 }}
               >
                 <Checkbox
-                  checked={
-                    filters.platforms?.includes(key as ECPlatform) || false
-                  }
+                  checked={filters.platforms?.includes(key as ECPlatform) || false}
                   size="small"
                 />
                 {label}

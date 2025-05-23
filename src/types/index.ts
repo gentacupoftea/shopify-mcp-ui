@@ -3,22 +3,16 @@
  */
 
 // ECプラットフォーム種別
-export type ECPlatform =
-  | "shopify"
-  | "rakuten"
-  | "amazon"
-  | "yahoo"
-  | "base"
-  | "mercari";
+export type ECPlatform = 'shopify' | 'rakuten' | 'amazon' | 'yahoo' | 'base' | 'mercari';
 
 // ユーザー認証
 export interface User {
   id: string;
   email: string;
   name: string;
-  role: "admin" | "manager" | "user" | "viewer";
-  language: "ja" | "en";
-  theme: "light" | "dark";
+  role: 'admin' | 'manager' | 'user' | 'viewer';
+  language: 'ja' | 'en';
+  theme: 'light' | 'dark';
   permissions: string[];
   lastLogin: Date;
 }
@@ -31,7 +25,7 @@ export interface APIConfig {
   accessToken?: string;
   shopUrl?: string;
   lastSync: Date;
-  status: "active" | "inactive" | "error";
+  status: 'active' | 'inactive' | 'error';
 }
 
 // 商品データ
@@ -49,7 +43,7 @@ export interface Product {
   images: string[];
   categories: string[];
   tags: string[];
-  status: "active" | "draft" | "archived";
+  status: 'active' | 'draft' | 'archived';
   createdAt: Date;
   updatedAt: Date;
   syncedAt: Date;
@@ -69,7 +63,7 @@ export interface Order {
   items: OrderItem[];
   totalAmount: number;
   currency: string;
-  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   shippingMethod?: string;
   trackingNumber?: string;
   createdAt: Date;
@@ -98,7 +92,7 @@ export interface Address {
 
 // SEOデータ
 export interface SEOData {
-  platform: "google" | "bing";
+  platform: 'google' | 'bing';
   impressions: number;
   clicks: number;
   ctr: number; // Click Through Rate
@@ -113,13 +107,13 @@ export interface KeywordData {
   impressions: number;
   clicks: number;
   position: number;
-  trend: "up" | "down" | "stable";
+  trend: 'up' | 'down' | 'stable';
 }
 
 // ダッシュボードウィジェット
 export interface Widget {
   id: string;
-  type: "chart" | "metric" | "table" | "map";
+  type: 'chart' | 'metric' | 'table' | 'map';
   title: string;
   dataSource: string;
   config: Record<string, any>;
@@ -136,7 +130,7 @@ export interface ChartData {
     data: number[];
     backgroundColor?: string;
     borderColor?: string;
-    type?: "line" | "bar" | "pie" | "doughnut";
+    type?: 'line' | 'bar' | 'pie' | 'doughnut';
   }[];
 }
 
@@ -144,16 +138,16 @@ export interface ChartData {
 export interface ReportConfig {
   id: string;
   name: string;
-  type: "sales" | "inventory" | "seo" | "custom";
+  type: 'sales' | 'inventory' | 'seo' | 'custom';
   platforms: ECPlatform[];
   dateRange: {
     start: Date;
     end: Date;
   };
   metrics: string[];
-  format: "pdf" | "csv" | "excel";
+  format: 'pdf' | 'csv' | 'excel';
   schedule?: {
-    frequency: "daily" | "weekly" | "monthly";
+    frequency: 'daily' | 'weekly' | 'monthly';
     recipients: string[];
   };
 }
@@ -161,7 +155,7 @@ export interface ReportConfig {
 // 通知設定
 export interface Notification {
   id: string;
-  type: "success" | "error" | "warning" | "info";
+  type: 'success' | 'error' | 'warning' | 'info';
   title: string;
   message: string;
   timestamp: Date;
@@ -191,7 +185,7 @@ export interface PaginationParams {
   page: number;
   perPage: number;
   sortBy?: string;
-  sortOrder?: "asc" | "desc";
+  sortOrder?: 'asc' | 'desc';
 }
 
 // フィルター条件

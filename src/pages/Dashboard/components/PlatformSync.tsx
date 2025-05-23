@@ -1,12 +1,12 @@
-import React from "react";
-import { Box, Typography, Button, Paper, LinearProgress } from "@mui/material";
-import { Sync, CheckCircle, Error } from "@mui/icons-material";
-import { ECPlatform } from "../../../types";
+import React from 'react';
+import { Box, Typography, Button, Paper, LinearProgress } from '@mui/material';
+import { Sync, CheckCircle, Error } from '@mui/icons-material';
+import { ECPlatform } from '../../../types';
 
 interface PlatformStatus {
   platform: ECPlatform;
   lastSync: Date;
-  status: "synced" | "syncing" | "error" | "pending";
+  status: 'synced' | 'syncing' | 'error' | 'pending';
   progress?: number;
 }
 
@@ -15,26 +15,23 @@ interface PlatformSyncProps {
   onSync: (platform: ECPlatform) => void;
 }
 
-export const PlatformSync: React.FC<PlatformSyncProps> = ({
-  platforms,
-  onSync,
-}) => {
+export const PlatformSync: React.FC<PlatformSyncProps> = ({ platforms, onSync }) => {
   const platformLabels: Record<ECPlatform, string> = {
-    shopify: "Shopify",
-    rakuten: "楽天",
-    yahoo: "Yahoo!",
-    amazon: "Amazon",
-    base: "BASE",
-    mercari: "メルカリ",
+    shopify: 'Shopify',
+    rakuten: '楽天',
+    yahoo: 'Yahoo!',
+    amazon: 'Amazon',
+    base: 'BASE',
+    mercari: 'メルカリ',
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "synced":
+      case 'synced':
         return <CheckCircle color="success" />;
-      case "error":
+      case 'error':
         return <Error color="error" />;
-      case "syncing":
+      case 'syncing':
         return <Sync className="animate-spin" />;
       default:
         return <Sync color="disabled" />;
@@ -46,7 +43,7 @@ export const PlatformSync: React.FC<PlatformSyncProps> = ({
       {platforms.map((platform) => (
         <Paper
           key={platform.platform}
-          sx={{ p: 2, mb: 2, display: "flex", alignItems: "center" }}
+          sx={{ p: 2, mb: 2, display: 'flex', alignItems: 'center' }}
         >
           <Box flex={1}>
             <Box display="flex" alignItems="center" gap={1}>
@@ -58,7 +55,7 @@ export const PlatformSync: React.FC<PlatformSyncProps> = ({
             <Typography variant="caption" color="text.secondary">
               Last sync: {new Date(platform.lastSync).toLocaleString()}
             </Typography>
-            {platform.status === "syncing" && platform.progress && (
+            {platform.status === 'syncing' && platform.progress && (
               <LinearProgress
                 variant="determinate"
                 value={platform.progress}
@@ -71,7 +68,7 @@ export const PlatformSync: React.FC<PlatformSyncProps> = ({
             size="small"
             startIcon={<Sync />}
             onClick={() => onSync(platform.platform)}
-            disabled={platform.status === "syncing"}
+            disabled={platform.status === 'syncing'}
           >
             Sync
           </Button>

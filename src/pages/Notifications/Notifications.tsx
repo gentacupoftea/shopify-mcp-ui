@@ -1,7 +1,7 @@
 /**
  * 通知一覧ページ
  */
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Container,
   Typography,
@@ -18,7 +18,7 @@ import {
   Select,
   MenuItem,
   InputLabel,
-} from "@mui/material";
+} from '@mui/material';
 import {
   CheckCircle,
   Error,
@@ -29,15 +29,15 @@ import {
   Delete,
   CheckBox,
   CheckBoxOutlineBlank,
-} from "@mui/icons-material";
-import { useTranslation } from "react-i18next";
-import { mainLayout } from "../../layouts/MainLayout";
-import { Card } from "../../atoms";
-import { formatDate, formatRelativeTime } from "../../utils/format";
+} from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
+import { mainLayout } from '../../layouts/MainLayout';
+import { Card } from '../../atoms';
+import { formatDate, formatRelativeTime } from '../../utils/format';
 
 interface Notification {
   id: string;
-  type: "success" | "error" | "warning" | "info" | "order" | "sales";
+  type: 'success' | 'error' | 'warning' | 'info' | 'order' | 'sales';
   title: string;
   message: string;
   timestamp: Date;
@@ -49,79 +49,79 @@ interface Notification {
 const NotificationsComponent: React.FC = () => {
   const { t } = useTranslation();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [filter, setFilter] = useState("all");
-  const [typeFilter, setTypeFilter] = useState("all");
+  const [filter, setFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
 
   const [notifications, setNotifications] = useState<Notification[]>([
     {
-      id: "1",
-      type: "order",
-      title: "新規注文",
-      message: "田中太郎様から新規注文が入りました",
+      id: '1',
+      type: 'order',
+      title: '新規注文',
+      message: '田中太郎様から新規注文が入りました',
       timestamp: new Date(Date.now() - 1000 * 60 * 5),
       read: false,
-      category: "注文",
-      actionUrl: "/orders/123",
+      category: '注文',
+      actionUrl: '/orders/123',
     },
     {
-      id: "2",
-      type: "sales",
-      title: "売上目標達成",
-      message: "今月の売上目標を達成しました",
+      id: '2',
+      type: 'sales',
+      title: '売上目標達成',
+      message: '今月の売上目標を達成しました',
       timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
       read: false,
-      category: "売上",
+      category: '売上',
     },
     {
-      id: "3",
-      type: "warning",
-      title: "在庫アラート",
-      message: "「商品A」の在庫が残り5個になりました",
+      id: '3',
+      type: 'warning',
+      title: '在庫アラート',
+      message: '「商品A」の在庫が残り5個になりました',
       timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24),
       read: true,
-      category: "在庫",
-      actionUrl: "/inventory/products/A",
+      category: '在庫',
+      actionUrl: '/inventory/products/A',
     },
     {
-      id: "4",
-      type: "success",
-      title: "API接続成功",
-      message: "Shopify APIの接続に成功しました",
+      id: '4',
+      type: 'success',
+      title: 'API接続成功',
+      message: 'Shopify APIの接続に成功しました',
       timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2),
       read: true,
-      category: "システム",
+      category: 'システム',
     },
     {
-      id: "5",
-      type: "error",
-      title: "エラー検出",
-      message: "楽天APIの接続でエラーが発生しました",
+      id: '5',
+      type: 'error',
+      title: 'エラー検出',
+      message: '楽天APIの接続でエラーが発生しました',
       timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3),
       read: true,
-      category: "システム",
+      category: 'システム',
     },
   ]);
 
-  const filteredNotifications = notifications.filter((n) => {
-    if (filter === "unread" && n.read) return false;
-    if (filter === "read" && !n.read) return false;
-    if (typeFilter !== "all" && n.category !== typeFilter) return false;
+  const filteredNotifications = notifications.filter(n => {
+    if (filter === 'unread' && n.read) return false;
+    if (filter === 'read' && !n.read) return false;
+    if (typeFilter !== 'all' && n.category !== typeFilter) return false;
     return true;
   });
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case "success":
+      case 'success':
         return <CheckCircle color="success" />;
-      case "error":
+      case 'error':
         return <Error color="error" />;
-      case "warning":
+      case 'warning':
         return <Warning color="warning" />;
-      case "info":
+      case 'info':
         return <Info color="info" />;
-      case "order":
+      case 'order':
         return <ShoppingCart color="primary" />;
-      case "sales":
+      case 'sales':
         return <TrendingUp color="primary" />;
       default:
         return <Info />;
@@ -130,22 +130,22 @@ const NotificationsComponent: React.FC = () => {
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case "success":
-        return "success";
-      case "error":
-        return "error";
-      case "warning":
-        return "warning";
-      case "info":
-        return "info";
+      case 'success':
+        return 'success';
+      case 'error':
+        return 'error';
+      case 'warning':
+        return 'warning';
+      case 'info':
+        return 'info';
       default:
-        return "primary";
+        return 'primary';
     }
   };
 
   const handleSelectNotification = (id: string) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     );
   };
 
@@ -153,21 +153,19 @@ const NotificationsComponent: React.FC = () => {
     if (selectedIds.length === filteredNotifications.length) {
       setSelectedIds([]);
     } else {
-      setSelectedIds(filteredNotifications.map((n) => n.id));
+      setSelectedIds(filteredNotifications.map(n => n.id));
     }
   };
 
   const handleMarkAsRead = () => {
-    setNotifications(
-      notifications.map((n) =>
-        selectedIds.includes(n.id) ? { ...n, read: true } : n,
-      ),
-    );
+    setNotifications(notifications.map(n =>
+      selectedIds.includes(n.id) ? { ...n, read: true } : n
+    ));
     setSelectedIds([]);
   };
 
   const handleDelete = () => {
-    setNotifications(notifications.filter((n) => !selectedIds.includes(n.id)));
+    setNotifications(notifications.filter(n => !selectedIds.includes(n.id)));
     setSelectedIds([]);
   };
 
@@ -177,24 +175,16 @@ const NotificationsComponent: React.FC = () => {
         <Typography variant="h4" sx={{ mb: 1 }}>
           通知
         </Typography>
-        <Typography color="text.secondary">システムからの通知を確認</Typography>
+        <Typography color="text.secondary">
+          システムからの通知を確認
+        </Typography>
       </Box>
 
       <Card>
         {/* フィルターバー */}
-        <Box
-          sx={{
-            p: 2,
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-            borderBottom: 1,
-            borderColor: "divider",
-          }}
-        >
+        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2, borderBottom: 1, borderColor: 'divider' }}>
           <IconButton onClick={handleSelectAll}>
-            {selectedIds.length === filteredNotifications.length &&
-            filteredNotifications.length > 0 ? (
+            {selectedIds.length === filteredNotifications.length && filteredNotifications.length > 0 ? (
               <CheckBox />
             ) : (
               <CheckBoxOutlineBlank />
@@ -231,7 +221,7 @@ const NotificationsComponent: React.FC = () => {
 
           {selectedIds.length > 0 && (
             <>
-              <Box sx={{ ml: "auto" }} />
+              <Box sx={{ ml: 'auto' }} />
               <Button
                 variant="outlined"
                 size="small"
@@ -260,9 +250,9 @@ const NotificationsComponent: React.FC = () => {
               button
               onClick={() => handleSelectNotification(notification.id)}
               sx={{
-                bgcolor: notification.read ? "transparent" : "action.hover",
-                "&:hover": {
-                  bgcolor: "action.selected",
+                bgcolor: notification.read ? 'transparent' : 'action.hover',
+                '&:hover': {
+                  bgcolor: 'action.selected',
                 },
               }}
             >
@@ -277,14 +267,14 @@ const NotificationsComponent: React.FC = () => {
               </ListItemIcon>
 
               <ListItemIcon>
-                <Avatar sx={{ bgcolor: "background.paper" }}>
+                <Avatar sx={{ bgcolor: 'background.paper' }}>
                   {getNotificationIcon(notification.type)}
                 </Avatar>
               </ListItemIcon>
 
               <ListItemText
                 primary={
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Typography variant="subtitle1">
                       {notification.title}
                     </Typography>
@@ -318,8 +308,7 @@ const NotificationsComponent: React.FC = () => {
                       color="text.secondary"
                       sx={{ mt: 0.5 }}
                     >
-                      {formatRelativeTime(notification.timestamp)} •{" "}
-                      {formatDate(notification.timestamp, "yyyy/MM/dd HH:mm")}
+                      {formatRelativeTime(notification.timestamp)} • {formatDate(notification.timestamp, 'yyyy/MM/dd HH:mm')}
                     </Typography>
                   </>
                 }
@@ -342,8 +331,10 @@ const NotificationsComponent: React.FC = () => {
         </List>
 
         {filteredNotifications.length === 0 && (
-          <Box sx={{ p: 4, textAlign: "center" }}>
-            <Typography color="text.secondary">通知がありません</Typography>
+          <Box sx={{ p: 4, textAlign: 'center' }}>
+            <Typography color="text.secondary">
+              通知がありません
+            </Typography>
           </Box>
         )}
       </Card>

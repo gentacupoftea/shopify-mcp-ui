@@ -1,14 +1,14 @@
-import axios, { AxiosInstance, AxiosError } from "axios";
-import { AuthTokens } from "../types/auth";
+import axios, { AxiosInstance, AxiosError } from 'axios';
+import { AuthTokens } from '../types/auth';
 
 class ApiService {
   private instance: AxiosInstance;
   private refreshTokenPromise: Promise<AuthTokens> | null = null;
 
   constructor() {
-    const baseURL = process.env.REACT_APP_API_URL || "http://localhost:8000";
-    console.log("API baseURL:", baseURL);
-
+    const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+    console.log('API baseURL:', baseURL);
+    
     this.instance = axios.create({
       baseURL,
       timeout: 10000,
@@ -27,7 +27,7 @@ class ApiService {
         }
         return config;
       },
-      (error) => Promise.reject(error),
+      (error) => Promise.reject(error)
     );
 
     // Response interceptor to handle token refresh
@@ -36,13 +36,9 @@ class ApiService {
       async (error: AxiosError) => {
         const originalRequest = error.config;
 
-        if (
-          error.response?.status === 401 &&
-          originalRequest &&
-          !originalRequest.headers["X-Retry"]
-        ) {
+        if (error.response?.status === 401 && originalRequest && !originalRequest.headers['X-Retry']) {
           // Prevent infinite retry loop
-          originalRequest.headers["X-Retry"] = "true";
+          originalRequest.headers['X-Retry'] = 'true';
 
           try {
             // Ensure we only refresh once
@@ -59,44 +55,41 @@ class ApiService {
           } catch (refreshError) {
             // Refresh failed, redirect to login
             this.clearTokens();
-            window.location.href = "/login";
+            window.location.href = '/login';
             return Promise.reject(refreshError);
           }
         }
 
         return Promise.reject(error);
-      },
+      }
     );
   }
 
   private async refreshAccessToken(): Promise<AuthTokens> {
     const tokens = this.getStoredTokens();
     if (!tokens?.refresh_token) {
-      throw new Error("No refresh token available");
+      throw new Error('No refresh token available');
     }
 
-    const response = await this.instance.post<AuthTokens>(
-      "/api/v1/auth/refresh",
-      {
-        refresh_token: tokens.refresh_token,
-      },
-    );
+    const response = await this.instance.post<AuthTokens>('/api/v1/auth/refresh', {
+      refresh_token: tokens.refresh_token,
+    });
 
     this.storeTokens(response.data);
     return response.data;
   }
 
   private getStoredTokens(): AuthTokens | null {
-    const tokensJson = localStorage.getItem("auth_tokens");
+    const tokensJson = localStorage.getItem('auth_tokens');
     return tokensJson ? JSON.parse(tokensJson) : null;
   }
 
   private storeTokens(tokens: AuthTokens) {
-    localStorage.setItem("auth_tokens", JSON.stringify(tokens));
+    localStorage.setItem('auth_tokens', JSON.stringify(tokens));
   }
 
   private clearTokens() {
-    localStorage.removeItem("auth_tokens");
+    localStorage.removeItem('auth_tokens');
   }
 
   // Public methods
@@ -105,11 +98,7 @@ class ApiService {
     return response.data;
   }
 
-  public async post<T = any>(
-    url: string,
-    data?: any,
-    config?: any,
-  ): Promise<T> {
+  public async post<T = any>(url: string, data?: any, config?: any): Promise<T> {
     const response = await this.instance.post<T>(url, data, config);
     return response.data;
   }
@@ -124,14 +113,12 @@ class ApiService {
     return response.data;
   }
 
-  public async patch<T = any>(
-    url: string,
-    data?: any,
-    config?: any,
-  ): Promise<T> {
+  public async patch<T = any>(url: string, data?: any, config?: any): Promise<T> {
     const response = await this.instance.patch<T>(url, data, config);
     return response.data;
   }
 }
 
-export default new ApiService();
+const api = new ApiService();
+export default api;
+export { api };

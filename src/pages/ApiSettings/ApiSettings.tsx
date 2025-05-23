@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -27,7 +27,7 @@ import {
   Card,
   CardContent,
   LinearProgress,
-} from "@mui/material";
+} from '@mui/material';
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,
@@ -37,14 +37,14 @@ import {
   ArrowPathIcon,
   TrashIcon,
   QuestionMarkCircleIcon,
-} from "@heroicons/react/24/outline";
-import { useTranslation } from "react-i18next";
-import { mainLayout } from "../../layouts/MainLayout";
+} from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
+import { mainLayout } from '../../layouts/MainLayout';
 
 interface PlatformConfig {
   id: string;
   name: string;
-  status: "connected" | "disconnected" | "error";
+  status: 'connected' | 'disconnected' | 'error';
   lastSync?: Date;
   credentials?: {
     apiKey?: string;
@@ -85,32 +85,32 @@ const ApiSettingsComponent: React.FC = () => {
 
   const [platforms, setPlatforms] = useState<PlatformConfig[]>([
     {
-      id: "shopify",
-      name: "Shopify",
-      status: "connected",
-      lastSync: new Date("2024-01-20"),
+      id: 'shopify',
+      name: 'Shopify',
+      status: 'connected',
+      lastSync: new Date('2024-01-20'),
       credentials: {
-        storeUrl: "mystore.myshopify.com",
-        apiKey: "••••••••••••••••",
-        apiSecret: "••••••••••••••••",
+        storeUrl: 'mystore.myshopify.com',
+        apiKey: '••••••••••••••••',
+        apiSecret: '••••••••••••••••',
       },
     },
     {
-      id: "rakuten",
-      name: "楽天",
-      status: "disconnected",
+      id: 'rakuten',
+      name: '楽天',
+      status: 'disconnected',
     },
     {
-      id: "amazon",
-      name: "Amazon",
-      status: "error",
-      lastSync: new Date("2024-01-15"),
+      id: 'amazon',
+      name: 'Amazon',
+      status: 'error',
+      lastSync: new Date('2024-01-15'),
     },
     {
-      id: "gsc",
-      name: "Google Search Console",
-      status: "connected",
-      lastSync: new Date("2024-01-19"),
+      id: 'gsc',
+      name: 'Google Search Console',
+      status: 'connected',
+      lastSync: new Date('2024-01-19'),
     },
   ]);
 
@@ -129,39 +129,23 @@ const ApiSettingsComponent: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "connected":
-        return (
-          <CheckCircleIcon
-            style={{ width: 20, height: 20, color: theme.palette.success.main }}
-          />
-        );
-      case "error":
-        return (
-          <ExclamationCircleIcon
-            style={{ width: 20, height: 20, color: theme.palette.error.main }}
-          />
-        );
+      case 'connected':
+        return <CheckCircleIcon style={{ width: 20, height: 20, color: theme.palette.success.main }} />;
+      case 'error':
+        return <ExclamationCircleIcon style={{ width: 20, height: 20, color: theme.palette.error.main }} />;
       default:
-        return (
-          <LinkIcon
-            style={{
-              width: 20,
-              height: 20,
-              color: theme.palette.text.secondary,
-            }}
-          />
-        );
+        return <LinkIcon style={{ width: 20, height: 20, color: theme.palette.text.secondary }} />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "connected":
-        return "success";
-      case "error":
-        return "error";
+      case 'connected':
+        return 'success';
+      case 'error':
+        return 'error';
       default:
-        return "default";
+        return 'default';
     }
   };
 
@@ -179,10 +163,8 @@ const ApiSettingsComponent: React.FC = () => {
               Shopifyパートナーダッシュボードで新しいアプリを作成します。
             </Typography>
             <Alert severity="info" sx={{ mb: 2 }}>
-              1. Shopifyパートナーアカウントにログイン
-              <br />
-              2. 「アプリ」→「アプリを作成」をクリック
-              <br />
+              1. Shopifyパートナーアカウントにログイン<br />
+              2. 「アプリ」→「アプリを作成」をクリック<br />
               3. プライベートアプリとして作成
             </Alert>
             <Button
@@ -243,7 +225,9 @@ const ApiSettingsComponent: React.FC = () => {
               >
                 次へ
               </Button>
-              <Button onClick={() => setActiveStep(0)}>戻る</Button>
+              <Button onClick={() => setActiveStep(0)}>
+                戻る
+              </Button>
             </Box>
           </StepContent>
         </Step>
@@ -272,7 +256,9 @@ const ApiSettingsComponent: React.FC = () => {
               >
                 接続テスト
               </Button>
-              <Button onClick={() => setActiveStep(1)}>戻る</Button>
+              <Button onClick={() => setActiveStep(1)}>
+                戻る
+              </Button>
             </Box>
           </StepContent>
         </Step>
@@ -285,10 +271,16 @@ const ApiSettingsComponent: React.FC = () => {
       </Typography>
       <Card variant="outlined">
         <CardContent>
-          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-            {getStatusIcon("connected")}
-            <Typography sx={{ ml: 1 }}>接続済み</Typography>
-            <Chip label="最終同期: 2時間前" size="small" sx={{ ml: "auto" }} />
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            {getStatusIcon('connected')}
+            <Typography sx={{ ml: 1 }}>
+              接続済み
+            </Typography>
+            <Chip
+              label="最終同期: 2時間前"
+              size="small"
+              sx={{ ml: 'auto' }}
+            />
           </Box>
           <List>
             <ListItem disablePadding>
@@ -298,7 +290,10 @@ const ApiSettingsComponent: React.FC = () => {
               />
             </ListItem>
             <ListItem disablePadding>
-              <ListItemText primary="APIキー" secondary="••••••••••••••••" />
+              <ListItemText
+                primary="APIキー"
+                secondary="••••••••••••••••"
+              />
               <ListItemSecondaryAction>
                 <IconButton size="small">
                   <ArrowPathIcon style={{ width: 16, height: 16 }} />
@@ -306,7 +301,7 @@ const ApiSettingsComponent: React.FC = () => {
               </ListItemSecondaryAction>
             </ListItem>
           </List>
-          <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
+          <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
             <Button variant="outlined" size="small">
               再認証
             </Button>
@@ -325,7 +320,7 @@ const ApiSettingsComponent: React.FC = () => {
   );
 
   const renderPlatformTab = (platform: PlatformConfig) => {
-    if (platform.id === "shopify") {
+    if (platform.id === 'shopify') {
       return renderShopifySetup();
     }
 
@@ -334,7 +329,9 @@ const ApiSettingsComponent: React.FC = () => {
         <Typography variant="h6" sx={{ mb: 3 }}>
           {platform.name} API設定
         </Typography>
-        <Alert severity="info">{platform.name}の設定画面は準備中です。</Alert>
+        <Alert severity="info">
+          {platform.name}の設定画面は準備中です。
+        </Alert>
       </Box>
     );
   };
@@ -343,10 +340,10 @@ const ApiSettingsComponent: React.FC = () => {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" sx={{ mb: 1 }}>
-          {t("apiSettings.title")}
+          {t('apiSettings.title')}
         </Typography>
         <Typography color="text.secondary">
-          {t("apiSettings.description")}
+          {t('apiSettings.description')}
         </Typography>
       </Box>
 
@@ -357,31 +354,25 @@ const ApiSettingsComponent: React.FC = () => {
             <Card
               variant="outlined"
               sx={{
-                cursor: "pointer",
-                "&:hover": {
+                cursor: 'pointer',
+                '&:hover': {
                   borderColor: theme.palette.primary.main,
                 },
               }}
               onClick={() => {
-                const index = platforms.findIndex((p) => p.id === platform.id);
+                const index = platforms.findIndex(p => p.id === platform.id);
                 setActiveTab(index);
               }}
             >
               <CardContent>
-                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                   {getStatusIcon(platform.status)}
                   <Typography variant="h6" sx={{ ml: 1 }}>
                     {platform.name}
                   </Typography>
                 </Box>
                 <Chip
-                  label={
-                    platform.status === "connected"
-                      ? "接続済み"
-                      : platform.status === "error"
-                        ? "エラー"
-                        : "未接続"
-                  }
+                  label={platform.status === 'connected' ? '接続済み' : platform.status === 'error' ? 'エラー' : '未接続'}
                   size="small"
                   color={getStatusColor(platform.status)}
                 />
@@ -402,7 +393,7 @@ const ApiSettingsComponent: React.FC = () => {
           value={activeTab}
           onChange={handleTabChange}
           aria-label="API設定タブ"
-          sx={{ borderBottom: 1, borderColor: "divider" }}
+          sx={{ borderBottom: 1, borderColor: 'divider' }}
         >
           {platforms.map((platform, index) => (
             <Tab
@@ -422,10 +413,7 @@ const ApiSettingsComponent: React.FC = () => {
 
       {/* ヘルプセクション */}
       <Box sx={{ mt: 4 }}>
-        <Alert
-          severity="info"
-          icon={<QuestionMarkCircleIcon style={{ width: 20, height: 20 }} />}
-        >
+        <Alert severity="info" icon={<QuestionMarkCircleIcon style={{ width: 20, height: 20 }} />}>
           <Typography variant="body2">
             API設定についてお困りの場合は、
             <Button size="small" sx={{ ml: 1 }}>

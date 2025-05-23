@@ -1,8 +1,8 @@
 /**
  * 商品関連サービス
  */
-import api from "./api";
-import { Product, PaginationParams, FilterParams, APIResponse } from "@/types";
+import api from './api';
+import { Product, PaginationParams, FilterParams, APIResponse } from '@/types';
 
 interface ProductsResponse {
   items: Product[];
@@ -20,7 +20,7 @@ class ProductsService {
    */
   async getProducts(
     pagination: PaginationParams,
-    filters: FilterParams,
+    filters: FilterParams
   ): Promise<ProductsResponse> {
     const params = {
       page: pagination.page,
@@ -30,7 +30,7 @@ class ProductsService {
       ...filters,
     };
 
-    const response = await api.get<APIResponse<ProductsResponse>>("/products", {
+    const response = await api.get<APIResponse<ProductsResponse>>('/products', {
       params,
     });
 
@@ -38,7 +38,7 @@ class ProductsService {
       return response.data;
     }
 
-    throw new Error(response.error?.message || "商品の取得に失敗しました");
+    throw new Error(response.error?.message || '商品の取得に失敗しました');
   }
 
   /**
@@ -51,36 +51,33 @@ class ProductsService {
       return response.data;
     }
 
-    throw new Error(response.error?.message || "商品の取得に失敗しました");
+    throw new Error(response.error?.message || '商品の取得に失敗しました');
   }
 
   /**
    * 商品作成
    */
   async createProduct(data: Partial<Product>): Promise<Product> {
-    const response = await api.post<APIResponse<Product>>("/products", data);
+    const response = await api.post<APIResponse<Product>>('/products', data);
 
     if (response.success && response.data) {
       return response.data;
     }
 
-    throw new Error(response.error?.message || "商品の作成に失敗しました");
+    throw new Error(response.error?.message || '商品の作成に失敗しました');
   }
 
   /**
    * 商品更新
    */
   async updateProduct(id: string, data: Partial<Product>): Promise<Product> {
-    const response = await api.put<APIResponse<Product>>(
-      `/products/${id}`,
-      data,
-    );
+    const response = await api.put<APIResponse<Product>>(`/products/${id}`, data);
 
     if (response.success && response.data) {
       return response.data;
     }
 
-    throw new Error(response.error?.message || "商品の更新に失敗しました");
+    throw new Error(response.error?.message || '商品の更新に失敗しました');
   }
 
   /**
@@ -90,7 +87,7 @@ class ProductsService {
     const response = await api.delete<APIResponse<void>>(`/products/${id}`);
 
     if (!response.success) {
-      throw new Error(response.error?.message || "商品の削除に失敗しました");
+      throw new Error(response.error?.message || '商品の削除に失敗しました');
     }
   }
 
@@ -99,29 +96,26 @@ class ProductsService {
    */
   async syncProducts(platform: string): Promise<ProductsResponse> {
     const response = await api.post<APIResponse<ProductsResponse>>(
-      `/products/sync/${platform}`,
+      `/products/sync/${platform}`
     );
 
     if (response.success && response.data) {
       return response.data;
     }
 
-    throw new Error(response.error?.message || "商品の同期に失敗しました");
+    throw new Error(response.error?.message || '商品の同期に失敗しました');
   }
 
   /**
    * 商品エクスポート
    */
-  async exportProducts(
-    format: "csv" | "excel",
-    filters?: FilterParams,
-  ): Promise<Blob> {
-    const response = await api.get("/products/export", {
+  async exportProducts(format: 'csv' | 'excel', filters?: FilterParams): Promise<Blob> {
+    const response = await api.get('/products/export', {
       params: {
         format,
         ...filters,
       },
-      responseType: "blob",
+      responseType: 'blob',
     });
 
     return response as unknown as Blob;
@@ -130,29 +124,26 @@ class ProductsService {
   /**
    * 商品インポート
    */
-  async importProducts(
-    file: File,
-    platform: string,
-  ): Promise<{ imported: number; errors: any[] }> {
+  async importProducts(file: File, platform: string): Promise<{ imported: number; errors: any[] }> {
     const formData = new FormData();
-    formData.append("file", file);
-    formData.append("platform", platform);
+    formData.append('file', file);
+    formData.append('platform', platform);
 
-    const response = await api.post<
-      APIResponse<{ imported: number; errors: any[] }>
-    >("/products/import", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await api.post<APIResponse<{ imported: number; errors: any[] }>>(
+      '/products/import',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
 
     if (response.success && response.data) {
       return response.data;
     }
 
-    throw new Error(
-      response.error?.message || "商品のインポートに失敗しました",
-    );
+    throw new Error(response.error?.message || '商品のインポートに失敗しました');
   }
 
   /**
@@ -160,25 +151,23 @@ class ProductsService {
    */
   async uploadImage(productId: string, file: File): Promise<string> {
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append('image', file);
 
     const response = await api.post<APIResponse<{ url: string }>>(
       `/products/${productId}/images`,
       formData,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
-      },
+      }
     );
 
     if (response.success && response.data) {
       return response.data.url;
     }
 
-    throw new Error(
-      response.error?.message || "画像のアップロードに失敗しました",
-    );
+    throw new Error(response.error?.message || '画像のアップロードに失敗しました');
   }
 
   /**
@@ -189,11 +178,11 @@ class ProductsService {
       `/products/${productId}/images`,
       {
         data: { imageUrl },
-      },
+      }
     );
 
     if (!response.success) {
-      throw new Error(response.error?.message || "画像の削除に失敗しました");
+      throw new Error(response.error?.message || '画像の削除に失敗しました');
     }
   }
 
@@ -202,18 +191,18 @@ class ProductsService {
    */
   async updateInventory(
     productId: string,
-    inventory: number,
+    inventory: number
   ): Promise<Product> {
     const response = await api.patch<APIResponse<Product>>(
       `/products/${productId}/inventory`,
-      { inventory },
+      { inventory }
     );
 
     if (response.success && response.data) {
       return response.data;
     }
 
-    throw new Error(response.error?.message || "在庫の更新に失敗しました");
+    throw new Error(response.error?.message || '在庫の更新に失敗しました');
   }
 
   /**
@@ -221,23 +210,21 @@ class ProductsService {
    */
   async bulkUpdateStatus(
     productIds: string[],
-    status: "active" | "draft" | "archived",
+    status: 'active' | 'draft' | 'archived'
   ): Promise<{ updated: number }> {
     const response = await api.post<APIResponse<{ updated: number }>>(
-      "/products/bulk/status",
+      '/products/bulk/status',
       {
         productIds,
         status,
-      },
+      }
     );
 
     if (response.success && response.data) {
       return response.data;
     }
 
-    throw new Error(
-      response.error?.message || "ステータスの更新に失敗しました",
-    );
+    throw new Error(response.error?.message || 'ステータスの更新に失敗しました');
   }
 }
 

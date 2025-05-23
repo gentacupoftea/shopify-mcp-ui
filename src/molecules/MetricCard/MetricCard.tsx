@@ -2,16 +2,11 @@
  * メトリクスカードコンポーネント
  * 数値やパーセンテージなどの指標を表示するカード
  */
-import React from "react";
-import { Typography, Box, IconButton, Tooltip } from "@mui/material";
-import {
-  TrendingUp,
-  TrendingDown,
-  TrendingFlat,
-  Info,
-} from "@mui/icons-material";
-import { Card } from "../../atoms";
-import { formatNumber, formatPercent } from "../../utils/format";
+import React from 'react';
+import { Typography, Box, IconButton, Tooltip } from '@mui/material';
+import { TrendingUp, TrendingDown, TrendingFlat, Info } from '@mui/icons-material';
+import { Card } from '../../atoms';
+import { formatNumber, formatPercent } from '../../utils/format';
 
 export interface MetricCardProps {
   title: string;
@@ -19,35 +14,32 @@ export interface MetricCardProps {
   subtitle?: string;
   trend?: {
     value: number;
-    direction: "up" | "down" | "neutral";
+    direction: 'up' | 'down' | 'neutral';
   };
-  format?: "number" | "currency" | "percent";
+  format?: 'number' | 'currency' | 'percent';
   currency?: string;
   info?: string;
   onClick?: () => void;
 }
 
-const getTrendIcon = (direction: "up" | "down" | "neutral") => {
+const getTrendIcon = (direction: 'up' | 'down' | 'neutral') => {
   switch (direction) {
-    case "up":
+    case 'up':
       return <TrendingUp />;
-    case "down":
+    case 'down':
       return <TrendingDown />;
     default:
       return <TrendingFlat />;
   }
 };
 
-const getTrendColor = (
-  direction: "up" | "down" | "neutral",
-  isPositiveGood = true,
-) => {
-  if (direction === "neutral") return "text.secondary";
-
-  const isPositive = direction === "up";
+const getTrendColor = (direction: 'up' | 'down' | 'neutral', isPositiveGood = true) => {
+  if (direction === 'neutral') return 'text.secondary';
+  
+  const isPositive = direction === 'up';
   return (isPositive && isPositiveGood) || (!isPositive && !isPositiveGood)
-    ? "success.main"
-    : "error.main";
+    ? 'success.main'
+    : 'error.main';
 };
 
 export const MetricCard: React.FC<MetricCardProps> = ({
@@ -55,22 +47,22 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   value,
   subtitle,
   trend,
-  format = "number",
-  currency = "JPY",
+  format = 'number',
+  currency = 'JPY',
   info,
   onClick,
 }) => {
   const formatValue = () => {
-    if (typeof value === "string") return value;
-
+    if (typeof value === 'string') return value;
+    
     switch (format) {
-      case "currency":
-        return new Intl.NumberFormat("ja-JP", {
-          style: "currency",
+      case 'currency':
+        return new Intl.NumberFormat('ja-JP', {
+          style: 'currency',
           currency,
           maximumFractionDigits: 0,
         }).format(value);
-      case "percent":
+      case 'percent':
         return formatPercent(value);
       default:
         return formatNumber(value);
@@ -78,17 +70,17 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   };
 
   return (
-    <Card
-      sx={{
-        cursor: onClick ? "pointer" : "default",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
+    <Card 
+      sx={{ 
+        cursor: onClick ? 'pointer' : 'default',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
       }}
       onClick={onClick}
     >
       <Box sx={{ flex: 1 }}>
-        <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
           <Typography variant="body2" color="text.secondary" sx={{ flex: 1 }}>
             {title}
           </Typography>
@@ -100,27 +92,23 @@ export const MetricCard: React.FC<MetricCardProps> = ({
             </Tooltip>
           )}
         </Box>
-
-        <Typography
-          variant="h4"
-          component="div"
-          sx={{ mb: 1, fontWeight: 600 }}
-        >
+        
+        <Typography variant="h4" component="div" sx={{ mb: 1, fontWeight: 600 }}>
           {formatValue()}
         </Typography>
-
+        
         {subtitle && (
           <Typography variant="body2" color="text.secondary">
             {subtitle}
           </Typography>
         )}
-
+        
         {trend && (
-          <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
             <Box
               sx={{
-                display: "flex",
-                alignItems: "center",
+                display: 'flex',
+                alignItems: 'center',
                 color: getTrendColor(trend.direction),
               }}
             >

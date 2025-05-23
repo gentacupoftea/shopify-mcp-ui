@@ -1,8 +1,8 @@
 /**
  * 通知状態管理スライス
  */
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Notification } from "../../types";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Notification } from '../../types';
 
 interface NotificationsState {
   items: Notification[];
@@ -15,7 +15,7 @@ const initialState: NotificationsState = {
 };
 
 const notificationsSlice = createSlice({
-  name: "notifications",
+  name: 'notifications',
   initialState,
   reducers: {
     addNotification: (state, action: PayloadAction<Notification>) => {
@@ -26,7 +26,7 @@ const notificationsSlice = createSlice({
     },
     markAsRead: (state, action: PayloadAction<string>) => {
       const notification = state.items.find(
-        (item) => item.id === action.payload,
+        (item) => item.id === action.payload
       );
       if (notification && !notification.read) {
         notification.read = true;
@@ -40,7 +40,9 @@ const notificationsSlice = createSlice({
       state.unreadCount = 0;
     },
     removeNotification: (state, action: PayloadAction<string>) => {
-      const index = state.items.findIndex((item) => item.id === action.payload);
+      const index = state.items.findIndex(
+        (item) => item.id === action.payload
+      );
       if (index !== -1) {
         if (!state.items[index].read) {
           state.unreadCount -= 1;

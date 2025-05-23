@@ -1,7 +1,7 @@
 /**
  * プロフィール編集ページ
  */
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Container,
   Grid,
@@ -18,39 +18,38 @@ import {
   MenuItem,
   Chip,
   Alert,
-} from "@mui/material";
-import { PhotoCamera, Save, Cancel, Add, Close } from "@mui/icons-material";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import { mainLayout } from "../../layouts/MainLayout";
-import { Card } from "../../atoms";
+} from '@mui/material';
+import {
+  PhotoCamera,
+  Save,
+  Cancel,
+  Add,
+  Close,
+} from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { mainLayout } from '../../layouts/MainLayout';
+import { Card } from '../../atoms';
 
 const ProfileEditComponent: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-
+  
   const [formData, setFormData] = useState({
-    name: "山田太郎",
-    email: "yamada@example.com",
-    phone: "090-1234-5678",
-    company: "株式会社サンプル",
-    location: "東京都渋谷区",
-    bio: "ECサイト運営のプロフェッショナル。10年以上の経験を持ち、複数のブランドの成功に貢献。",
-    language: "ja",
-    timezone: "Asia/Tokyo",
+    name: '山田太郎',
+    email: 'yamada@example.com',
+    phone: '090-1234-5678',
+    company: '株式会社サンプル',
+    location: '東京都渋谷区',
+    bio: 'ECサイト運営のプロフェッショナル。10年以上の経験を持ち、複数のブランドの成功に貢献。',
+    language: 'ja',
+    timezone: 'Asia/Tokyo',
   });
-
-  const [skills, setSkills] = useState([
-    "Eコマース",
-    "マーケティング",
-    "データ分析",
-    "在庫管理",
-  ]);
-  const [newSkill, setNewSkill] = useState("");
+  
+  const [skills, setSkills] = useState(['Eコマース', 'マーケティング', 'データ分析', '在庫管理']);
+  const [newSkill, setNewSkill] = useState('');
   const [avatar, setAvatar] = useState<File | null>(null);
-  const [saveStatus, setSaveStatus] = useState<
-    "idle" | "saving" | "saved" | "error"
-  >("idle");
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
   const handleInputChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
@@ -65,30 +64,30 @@ const ProfileEditComponent: React.FC = () => {
   const handleAddSkill = () => {
     if (newSkill && !skills.includes(newSkill)) {
       setSkills([...skills, newSkill]);
-      setNewSkill("");
+      setNewSkill('');
     }
   };
 
   const handleRemoveSkill = (skill: string) => {
-    setSkills(skills.filter((s) => s !== skill));
+    setSkills(skills.filter(s => s !== skill));
   };
 
   const handleSave = async () => {
-    setSaveStatus("saving");
+    setSaveStatus('saving');
     try {
       // ここで実際の保存処理を行う
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setSaveStatus("saved");
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setSaveStatus('saved');
       setTimeout(() => {
-        navigate("/profile");
+        navigate('/profile');
       }, 1000);
     } catch (error) {
-      setSaveStatus("error");
+      setSaveStatus('error');
     }
   };
 
   const handleCancel = () => {
-    navigate("/profile");
+    navigate('/profile');
   };
 
   return (
@@ -97,16 +96,18 @@ const ProfileEditComponent: React.FC = () => {
         <Typography variant="h4" sx={{ mb: 1 }}>
           プロフィール編集
         </Typography>
-        <Typography color="text.secondary">アカウント情報を更新</Typography>
+        <Typography color="text.secondary">
+          アカウント情報を更新
+        </Typography>
       </Box>
 
-      {saveStatus === "saved" && (
+      {saveStatus === 'saved' && (
         <Alert severity="success" sx={{ mb: 3 }}>
           プロフィールを更新しました
         </Alert>
       )}
 
-      {saveStatus === "error" && (
+      {saveStatus === 'error' && (
         <Alert severity="error" sx={{ mb: 3 }}>
           更新に失敗しました。もう一度お試しください。
         </Alert>
@@ -116,10 +117,10 @@ const ProfileEditComponent: React.FC = () => {
         {/* プロフィール画像 */}
         <Grid item xs={12} md={4}>
           <Card>
-            <Box sx={{ textAlign: "center", py: 3 }}>
+            <Box sx={{ textAlign: 'center', py: 3 }}>
               <input
                 accept="image/*"
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
                 id="avatar-upload"
                 type="file"
                 onChange={handleAvatarChange}
@@ -128,8 +129,8 @@ const ProfileEditComponent: React.FC = () => {
                 <IconButton
                   component="span"
                   sx={{
-                    position: "relative",
-                    "&:hover .overlay": { opacity: 1 },
+                    position: 'relative',
+                    '&:hover .overlay': { opacity: 1 },
                   }}
                 >
                   <Avatar
@@ -141,21 +142,21 @@ const ProfileEditComponent: React.FC = () => {
                   <Box
                     className="overlay"
                     sx={{
-                      position: "absolute",
+                      position: 'absolute',
                       top: 0,
                       left: 0,
-                      width: "100%",
-                      height: "100%",
-                      bgcolor: "rgba(0, 0, 0, 0.5)",
-                      borderRadius: "50%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      width: '100%',
+                      height: '100%',
+                      bgcolor: 'rgba(0, 0, 0, 0.5)',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       opacity: 0,
-                      transition: "opacity 0.3s",
+                      transition: 'opacity 0.3s',
                     }}
                   >
-                    <PhotoCamera sx={{ color: "white" }} />
+                    <PhotoCamera sx={{ color: 'white' }} />
                   </Box>
                 </IconButton>
               </label>
@@ -175,7 +176,7 @@ const ProfileEditComponent: React.FC = () => {
                   fullWidth
                   label="名前"
                   value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -184,7 +185,7 @@ const ProfileEditComponent: React.FC = () => {
                   label="メールアドレス"
                   type="email"
                   value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -192,7 +193,7 @@ const ProfileEditComponent: React.FC = () => {
                   fullWidth
                   label="電話番号"
                   value={formData.phone}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  onChange={(e) => handleInputChange('phone', e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -200,7 +201,7 @@ const ProfileEditComponent: React.FC = () => {
                   fullWidth
                   label="会社名"
                   value={formData.company}
-                  onChange={(e) => handleInputChange("company", e.target.value)}
+                  onChange={(e) => handleInputChange('company', e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -208,9 +209,7 @@ const ProfileEditComponent: React.FC = () => {
                   fullWidth
                   label="所在地"
                   value={formData.location}
-                  onChange={(e) =>
-                    handleInputChange("location", e.target.value)
-                  }
+                  onChange={(e) => handleInputChange('location', e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -220,7 +219,7 @@ const ProfileEditComponent: React.FC = () => {
                   rows={4}
                   label="自己紹介"
                   value={formData.bio}
-                  onChange={(e) => handleInputChange("bio", e.target.value)}
+                  onChange={(e) => handleInputChange('bio', e.target.value)}
                   helperText="最大500文字"
                 />
               </Grid>
@@ -239,14 +238,14 @@ const ProfileEditComponent: React.FC = () => {
                 />
               ))}
             </Box>
-            <Box sx={{ display: "flex", gap: 1 }}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
               <TextField
                 size="small"
                 placeholder="新しいスキルを追加"
                 value={newSkill}
                 onChange={(e) => setNewSkill(e.target.value)}
                 onKeyPress={(e) => {
-                  if (e.key === "Enter") {
+                  if (e.key === 'Enter') {
                     e.preventDefault();
                     handleAddSkill();
                   }
@@ -271,9 +270,7 @@ const ProfileEditComponent: React.FC = () => {
                   <InputLabel>言語</InputLabel>
                   <Select
                     value={formData.language}
-                    onChange={(e) =>
-                      handleInputChange("language", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange('language', e.target.value)}
                     label="言語"
                   >
                     <MenuItem value="ja">日本語</MenuItem>
@@ -286,15 +283,11 @@ const ProfileEditComponent: React.FC = () => {
                   <InputLabel>タイムゾーン</InputLabel>
                   <Select
                     value={formData.timezone}
-                    onChange={(e) =>
-                      handleInputChange("timezone", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange('timezone', e.target.value)}
                     label="タイムゾーン"
                   >
                     <MenuItem value="Asia/Tokyo">東京 (GMT+9)</MenuItem>
-                    <MenuItem value="America/New_York">
-                      ニューヨーク (GMT-5)
-                    </MenuItem>
+                    <MenuItem value="America/New_York">ニューヨーク (GMT-5)</MenuItem>
                     <MenuItem value="Europe/London">ロンドン (GMT+0)</MenuItem>
                   </Select>
                 </FormControl>
@@ -303,9 +296,7 @@ const ProfileEditComponent: React.FC = () => {
           </Card>
 
           {/* アクションボタン */}
-          <Box
-            sx={{ mt: 4, display: "flex", justifyContent: "flex-end", gap: 2 }}
-          >
+          <Box sx={{ mt: 4, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
             <Button
               variant="outlined"
               onClick={handleCancel}
@@ -317,9 +308,9 @@ const ProfileEditComponent: React.FC = () => {
               variant="contained"
               onClick={handleSave}
               startIcon={<Save />}
-              disabled={saveStatus === "saving"}
+              disabled={saveStatus === 'saving'}
             >
-              {saveStatus === "saving" ? "保存中..." : "保存"}
+              {saveStatus === 'saving' ? '保存中...' : '保存'}
             </Button>
           </Box>
         </Grid>

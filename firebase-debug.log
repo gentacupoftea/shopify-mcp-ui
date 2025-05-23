@@ -1,0 +1,41 @@
+[debug] [2025-05-23T16:10:27.560Z] ----------------------------------------------------------------------
+[debug] [2025-05-23T16:10:27.561Z] Command:       /Users/mourigenta/.nvm/versions/node/v22.15.0/bin/node /Users/mourigenta/.nvm/versions/node/v22.15.0/bin/firebase projects:list
+[debug] [2025-05-23T16:10:27.561Z] CLI Version:   14.4.0
+[debug] [2025-05-23T16:10:27.561Z] Platform:      darwin
+[debug] [2025-05-23T16:10:27.562Z] Node Version:  v22.15.0
+[debug] [2025-05-23T16:10:27.562Z] Time:          Sat May 24 2025 01:10:27 GMT+0900 (日本標準時)
+[debug] [2025-05-23T16:10:27.562Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-05-23T16:10:27.653Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-05-23T16:10:27.653Z] > authorizing via signed-in user (genta@cupoftea.inc)
+[debug] [2025-05-23T16:10:27.655Z] Checked if tokens are valid: false, expires at: 1747996856883
+[debug] [2025-05-23T16:10:27.655Z] Checked if tokens are valid: false, expires at: 1747996856883
+[debug] [2025-05-23T16:10:27.655Z] > refreshing access token with scopes: []
+[debug] [2025-05-23T16:10:27.656Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-05-23T16:10:27.656Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-05-23T16:10:27.933Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2025-05-23T16:10:27.933Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-05-23T16:10:27.933Z] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-05-23T16:10:28.118Z] FirebaseError: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+    at invalidCredentialError (/Users/mourigenta/.nvm/versions/node/v22.15.0/lib/node_modules/firebase-tools/lib/auth.js:167:12)
+    at refreshTokens (/Users/mourigenta/.nvm/versions/node/v22.15.0/lib/node_modules/firebase-tools/lib/auth.js:556:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async getAccessToken (/Users/mourigenta/.nvm/versions/node/v22.15.0/lib/node_modules/firebase-tools/lib/apiv2.js:42:18)
+    at async Client.addAuthHeader (/Users/mourigenta/.nvm/versions/node/v22.15.0/lib/node_modules/firebase-tools/lib/apiv2.js:169:21)
+    at async Client.request (/Users/mourigenta/.nvm/versions/node/v22.15.0/lib/node_modules/firebase-tools/lib/apiv2.js:120:34)
+    at async getProjectPage (/Users/mourigenta/.nvm/versions/node/v22.15.0/lib/node_modules/firebase-tools/lib/management/projects.js:253:17)
+    at async getFirebaseProjectPage (/Users/mourigenta/.nvm/versions/node/v22.15.0/lib/node_modules/firebase-tools/lib/management/projects.js:270:23)
+    at async listFirebaseProjects (/Users/mourigenta/.nvm/versions/node/v22.15.0/lib/node_modules/firebase-tools/lib/management/projects.js:301:29)
+    at async Command.actionFn (/Users/mourigenta/.nvm/versions/node/v22.15.0/lib/node_modules/firebase-tools/lib/commands/projects-list.js:51:20)
+[error] 
+[error] Error: Failed to list Firebase projects. See firebase-debug.log for more info.

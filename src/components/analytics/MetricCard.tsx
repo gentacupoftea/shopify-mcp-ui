@@ -1,11 +1,11 @@
-import React from "react";
-import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import React from 'react';
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 interface MetricCardProps {
   title: string;
   value: string | number;
   icon: React.ReactNode;
-  trend?: "up" | "down" | "neutral";
+  trend?: 'up' | 'down' | 'neutral';
   trendValue?: number;
 }
 
@@ -13,13 +13,13 @@ const MetricCard: React.FC<MetricCardProps> = ({
   title,
   value,
   icon,
-  trend = "neutral",
+  trend = 'neutral',
   trendValue,
 }) => {
   const getTrendIcon = () => {
-    if (trend === "up") {
+    if (trend === 'up') {
       return <TrendingUp className="w-4 h-4 text-green-600" />;
-    } else if (trend === "down") {
+    } else if (trend === 'down') {
       return <TrendingDown className="w-4 h-4 text-red-600" />;
     } else {
       return <Minus className="w-4 h-4 text-gray-600" />;
@@ -27,9 +27,9 @@ const MetricCard: React.FC<MetricCardProps> = ({
   };
 
   const getTrendColor = () => {
-    if (trend === "up") return "text-green-600";
-    if (trend === "down") return "text-red-600";
-    return "text-gray-600";
+    if (trend === 'up') return 'text-green-600';
+    if (trend === 'down') return 'text-red-600';
+    return 'text-gray-600';
   };
 
   return (
@@ -42,7 +42,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
           <div className={`flex items-center space-x-1 ${getTrendColor()}`}>
             {getTrendIcon()}
             <span className="text-sm font-medium">
-              {trend === "up" ? "+" : trend === "down" ? "-" : ""}
+              {trend === 'up' ? '+' : trend === 'down' ? '-' : ''}
               {trendValue.toFixed(1)}%
             </span>
           </div>

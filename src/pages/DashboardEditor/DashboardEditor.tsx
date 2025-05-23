@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from 'react';
 import {
   Box,
   Container,
@@ -26,7 +26,7 @@ import {
   Toolbar,
   ToggleButton,
   ToggleButtonGroup,
-} from "@mui/material";
+} from '@mui/material';
 import {
   PlusIcon,
   EyeIcon,
@@ -43,12 +43,12 @@ import {
   TrashIcon,
   PencilIcon,
   Squares2X2Icon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline';
 // import { DndProvider, useDrag, useDrop } from 'react-dnd';
 // import { HTML5Backend } from 'react-dnd-html5-backend';
 // import { Responsive, WidthProvider } from 'react-grid-layout';
-import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 // import 'react-grid-layout/css/styles.css';
 // import 'react-resizable/css/styles.css';
 
@@ -56,7 +56,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 interface Widget {
   id: string;
-  type: "chart" | "table" | "metric" | "text";
+  type: 'chart' | 'table' | 'metric' | 'text';
   title: string;
   config: any;
   x: number;
@@ -77,10 +77,10 @@ interface Dashboard {
 }
 
 const widgetTypes = [
-  { id: "chart", label: "売上チャート", icon: ChartBarIcon },
-  { id: "table", label: "データテーブル", icon: TableCellsIcon },
-  { id: "metric", label: "KPIメトリクス", icon: CurrencyDollarIcon },
-  { id: "text", label: "テキスト", icon: DocumentTextIcon },
+  { id: 'chart', label: '売上チャート', icon: ChartBarIcon },
+  { id: 'table', label: 'データテーブル', icon: TableCellsIcon },
+  { id: 'metric', label: 'KPIメトリクス', icon: CurrencyDollarIcon },
+  { id: 'text', label: 'テキスト', icon: DocumentTextIcon },
 ];
 
 const DashboardEditorComponent: React.FC = () => {
@@ -88,27 +88,27 @@ const DashboardEditorComponent: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
-  const [viewMode, setViewMode] = useState<"edit" | "preview">("edit");
-  const [gridView, setGridView] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit');
+  const [gridView, setGridView] = useState<'grid' | 'list'>('grid');
   const [addWidgetDialogOpen, setAddWidgetDialogOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
-  const [selectedWidgetType, setSelectedWidgetType] = useState("");
+  const [selectedWidgetType, setSelectedWidgetType] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedWidget, setSelectedWidget] = useState<Widget | null>(null);
 
   const [dashboard, setDashboard] = useState<Dashboard>({
-    id: id || "new",
-    title: "新しいダッシュボード",
-    description: "",
+    id: id || 'new',
+    title: '新しいダッシュボード',
+    description: '',
     widgets: [],
     layout: [],
-    dateRange: "last30days",
+    dateRange: 'last30days',
     autoRefresh: false,
     refreshInterval: 5,
   });
 
   const handleLayoutChange = (layout: any) => {
-    setDashboard((prev) => ({ ...prev, layout }));
+    setDashboard(prev => ({ ...prev, layout }));
   };
 
   const handleAddWidget = () => {
@@ -117,7 +117,7 @@ const DashboardEditorComponent: React.FC = () => {
     const newWidget: Widget = {
       id: `widget_${Date.now()}`,
       type: selectedWidgetType as any,
-      title: widgetTypes.find((w) => w.id === selectedWidgetType)?.label || "",
+      title: widgetTypes.find(w => w.id === selectedWidgetType)?.label || '',
       config: {},
       x: 0,
       y: Infinity,
@@ -125,58 +125,54 @@ const DashboardEditorComponent: React.FC = () => {
       h: 4,
     };
 
-    setDashboard((prev) => ({
+    setDashboard(prev => ({
       ...prev,
       widgets: [...prev.widgets, newWidget],
     }));
 
     setAddWidgetDialogOpen(false);
-    setSelectedWidgetType("");
+    setSelectedWidgetType('');
   };
 
   const handleDeleteWidget = (widgetId: string) => {
-    setDashboard((prev) => ({
+    setDashboard(prev => ({
       ...prev,
-      widgets: prev.widgets.filter((w) => w.id !== widgetId),
+      widgets: prev.widgets.filter(w => w.id !== widgetId),
     }));
     setAnchorEl(null);
   };
 
   const handleSaveDashboard = () => {
     // ダッシュボードを保存する処理
-    console.log("Saving dashboard:", dashboard);
-    navigate("/dashboards");
+    console.log('Saving dashboard:', dashboard);
+    navigate('/dashboards');
   };
 
   const renderWidget = (widget: Widget) => {
-    const WidgetIcon =
-      widgetTypes.find((w) => w.id === widget.type)?.icon || ChartBarIcon;
+    const WidgetIcon = widgetTypes.find(w => w.id === widget.type)?.icon || ChartBarIcon;
 
     return (
       <Paper
         key={widget.id}
         sx={{
-          height: "100%",
+          height: '100%',
           p: 2,
-          position: "relative",
-          overflow: "hidden",
-          cursor: viewMode === "edit" ? "move" : "default",
-          bgcolor: theme.palette.mode === "dark" ? "#1a1a1a" : "#ffffff",
-          "&:hover":
-            viewMode === "edit"
-              ? {
-                  boxShadow: theme.shadows[4],
-                }
-              : {},
+          position: 'relative',
+          overflow: 'hidden',
+          cursor: viewMode === 'edit' ? 'move' : 'default',
+          bgcolor: theme.palette.mode === 'dark' ? '#1a1a1a' : '#ffffff',
+          '&:hover': viewMode === 'edit' ? {
+            boxShadow: theme.shadows[4],
+          } : {},
         }}
       >
-        {viewMode === "edit" && (
+        {viewMode === 'edit' && (
           <Box
             sx={{
-              position: "absolute",
+              position: 'absolute',
               top: 8,
               right: 8,
-              display: "flex",
+              display: 'flex',
               gap: 1,
             }}
           >
@@ -197,8 +193,8 @@ const DashboardEditorComponent: React.FC = () => {
             </IconButton>
           </Box>
         )}
-
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+        
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <WidgetIcon style={{ width: 24, height: 24, marginRight: 8 }} />
           <Typography variant="h6">{widget.title}</Typography>
         </Box>
@@ -206,12 +202,12 @@ const DashboardEditorComponent: React.FC = () => {
         {/* ウィジェットのコンテンツ */}
         <Box
           sx={{
-            height: "calc(100% - 60px)",
+            height: 'calc(100% - 60px)',
             padding: 2,
           }}
         >
-          {widget.type === "metric" && (
-            <Box sx={{ textAlign: "center" }}>
+          {widget.type === 'metric' && (
+            <Box sx={{ textAlign: 'center' }}>
               <Typography variant="h3" color="primary">
                 ¥1,234,567
               </Typography>
@@ -220,21 +216,23 @@ const DashboardEditorComponent: React.FC = () => {
               </Typography>
             </Box>
           )}
-          {widget.type === "chart" && (
-            <Box sx={{ color: "text.secondary", textAlign: "center" }}>
+          {widget.type === 'chart' && (
+            <Box sx={{ color: 'text.secondary', textAlign: 'center' }}>
               <Typography>チャートエリア</Typography>
               <Typography variant="caption">売上推移データ</Typography>
             </Box>
           )}
-          {widget.type === "table" && (
-            <Box sx={{ color: "text.secondary", textAlign: "center" }}>
+          {widget.type === 'table' && (
+            <Box sx={{ color: 'text.secondary', textAlign: 'center' }}>
               <Typography>テーブルエリア</Typography>
               <Typography variant="caption">注文一覧データ</Typography>
             </Box>
           )}
-          {widget.type === "text" && (
-            <Box sx={{ textAlign: "center" }}>
-              <Typography color="text.secondary">テキストコンテンツ</Typography>
+          {widget.type === 'text' && (
+            <Box sx={{ textAlign: 'center' }}>
+              <Typography color="text.secondary">
+                テキストコンテンツ
+              </Typography>
             </Box>
           )}
         </Box>
@@ -243,18 +241,18 @@ const DashboardEditorComponent: React.FC = () => {
   };
 
   return (
-    <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* ヘッダー */}
       <AppBar position="static" color="inherit" elevation={1}>
         <Toolbar>
           <IconButton
             edge="start"
-            onClick={() => navigate("/dashboards")}
+            onClick={() => navigate('/dashboards')}
             sx={{ mr: 2 }}
           >
             <ArrowLeftIcon style={{ width: 20, height: 20 }} />
           </IconButton>
-
+          
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             {dashboard.title}
           </Typography>
@@ -300,23 +298,15 @@ const DashboardEditorComponent: React.FC = () => {
       </AppBar>
 
       {/* メインコンテンツ */}
-      <Box
-        sx={{
-          flex: 1,
-          overflow: "auto",
-          p: 3,
-          bgcolor:
-            theme.palette.mode === "dark" ? "#000000" : theme.palette.grey[50],
-        }}
-      >
-        {viewMode === "edit" && dashboard.widgets.length === 0 ? (
+      <Box sx={{ flex: 1, overflow: 'auto', p: 3, bgcolor: theme.palette.mode === 'dark' ? '#000000' : theme.palette.grey[50] }}>
+        {viewMode === 'edit' && dashboard.widgets.length === 0 ? (
           <Box
             sx={{
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <Squares2X2Icon
@@ -344,7 +334,7 @@ const DashboardEditorComponent: React.FC = () => {
           </Box>
         ) : (
           <Grid container spacing={3}>
-            {dashboard.widgets.map((widget) => (
+            {dashboard.widgets.map(widget => (
               <Grid item xs={12} md={widget.w * 3} key={widget.id}>
                 {renderWidget(widget)}
               </Grid>
@@ -353,10 +343,10 @@ const DashboardEditorComponent: React.FC = () => {
         )}
 
         {/* 編集モードのフローティングボタン */}
-        {viewMode === "edit" && dashboard.widgets.length > 0 && (
+        {viewMode === 'edit' && dashboard.widgets.length > 0 && (
           <Box
             sx={{
-              position: "fixed",
+              position: 'fixed',
               bottom: 32,
               right: 32,
             }}
@@ -380,33 +370,25 @@ const DashboardEditorComponent: React.FC = () => {
       </Box>
 
       {/* ウィジェット追加ダイアログ */}
-      <Dialog
-        open={addWidgetDialogOpen}
-        onClose={() => setAddWidgetDialogOpen(false)}
-      >
+      <Dialog open={addWidgetDialogOpen} onClose={() => setAddWidgetDialogOpen(false)}>
         <DialogTitle>ウィジェットを追加</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
-            {widgetTypes.map((type) => (
+            {widgetTypes.map(type => (
               <Grid item xs={6} key={type.id}>
                 <Paper
                   sx={{
                     p: 3,
-                    textAlign: "center",
-                    cursor: "pointer",
-                    border:
-                      selectedWidgetType === type.id
-                        ? `2px solid ${theme.palette.primary.main}`
-                        : "2px solid transparent",
-                    "&:hover": {
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    border: selectedWidgetType === type.id ? `2px solid ${theme.palette.primary.main}` : '2px solid transparent',
+                    '&:hover': {
                       bgcolor: alpha(theme.palette.primary.main, 0.05),
                     },
                   }}
                   onClick={() => setSelectedWidgetType(type.id)}
                 >
-                  <type.icon
-                    style={{ width: 40, height: 40, marginBottom: 8 }}
-                  />
+                  <type.icon style={{ width: 40, height: 40, marginBottom: 8 }} />
                   <Typography>{type.label}</Typography>
                 </Paper>
               </Grid>
@@ -428,10 +410,7 @@ const DashboardEditorComponent: React.FC = () => {
       </Dialog>
 
       {/* 設定ダイアログ */}
-      <Dialog
-        open={settingsDialogOpen}
-        onClose={() => setSettingsDialogOpen(false)}
-      >
+      <Dialog open={settingsDialogOpen} onClose={() => setSettingsDialogOpen(false)}>
         <DialogTitle>ダッシュボード設定</DialogTitle>
         <DialogContent>
           <Stack spacing={3} sx={{ mt: 2, minWidth: 400 }}>
@@ -439,9 +418,7 @@ const DashboardEditorComponent: React.FC = () => {
               fullWidth
               label="タイトル"
               value={dashboard.title}
-              onChange={(e) =>
-                setDashboard((prev) => ({ ...prev, title: e.target.value }))
-              }
+              onChange={(e) => setDashboard(prev => ({ ...prev, title: e.target.value }))}
             />
             <TextField
               fullWidth
@@ -449,24 +426,14 @@ const DashboardEditorComponent: React.FC = () => {
               multiline
               rows={3}
               value={dashboard.description}
-              onChange={(e) =>
-                setDashboard((prev) => ({
-                  ...prev,
-                  description: e.target.value,
-                }))
-              }
+              onChange={(e) => setDashboard(prev => ({ ...prev, description: e.target.value }))}
             />
             <FormControl fullWidth>
               <InputLabel>日付範囲</InputLabel>
               <Select
                 value={dashboard.dateRange}
                 label="日付範囲"
-                onChange={(e) =>
-                  setDashboard((prev) => ({
-                    ...prev,
-                    dateRange: e.target.value,
-                  }))
-                }
+                onChange={(e) => setDashboard(prev => ({ ...prev, dateRange: e.target.value }))}
               >
                 <MenuItem value="today">今日</MenuItem>
                 <MenuItem value="yesterday">昨日</MenuItem>
@@ -498,21 +465,17 @@ const DashboardEditorComponent: React.FC = () => {
         open={Boolean(anchorEl)}
         onClose={() => setAnchorEl(null)}
       >
-        <MenuItem
-          onClick={() => {
-            // ウィジェット設定を開く
-            setAnchorEl(null);
-          }}
-        >
+        <MenuItem onClick={() => {
+          // ウィジェット設定を開く
+          setAnchorEl(null);
+        }}>
           <CogIcon style={{ width: 16, height: 16, marginRight: 8 }} />
           設定
         </MenuItem>
-        <MenuItem
-          onClick={() => {
-            // ウィジェットを複製
-            setAnchorEl(null);
-          }}
-        >
+        <MenuItem onClick={() => {
+          // ウィジェットを複製
+          setAnchorEl(null);
+        }}>
           <PlusIcon style={{ width: 16, height: 16, marginRight: 8 }} />
           複製
         </MenuItem>

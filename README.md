@@ -1,4 +1,4 @@
-# Conea (旧 Shopify MCP Dashboard)
+# Shopify MCP Dashboard
 
 A modern React dashboard for managing Shopify store data through the MCP Server.
 
@@ -9,17 +9,15 @@ A modern React dashboard for managing Shopify store data through the MCP Server.
 - 📱 Responsive design
 - 🌙 Dark mode support
 - 🚀 Fast and performant
-- ♿ WCAG AA accessibility compliance
 
 ## Tech Stack
 
 - React + TypeScript
-- Material UI + TailwindCSS for styling
+- TailwindCSS for styling
 - React Query for data fetching
 - React Router for navigation
 - Recharts for data visualization
 - Axios for API calls
-- Cypress with axe-core for accessibility testing
 
 ## Prerequisites
 
@@ -66,17 +64,12 @@ npm run build
 ```
 src/
 ├── components/     # Reusable UI components
-│   ├── charts/     # Data visualization components
-│   ├── common/     # Common UI elements with accessibility
-│   └── layout/     # Layout components
 ├── contexts/       # React contexts
 ├── hooks/          # Custom React hooks
 ├── pages/          # Page components
 ├── services/       # API services
 ├── types/          # TypeScript types
 ├── utils/          # Utility functions
-│   ├── accessibility.ts  # Accessibility utilities
-│   └── a11yChartPatterns.ts # Chart accessibility patterns
 └── App.tsx         # Main app component
 ```
 
@@ -86,27 +79,6 @@ src/
 - `npm build` - Build for production
 - `npm test` - Run tests
 - `npm run lint` - Lint code
-- `npm run format` - Format code with Prettier
-- `npm run cypress:open` - Open Cypress test runner
-- `npm run cypress:run` - Run Cypress tests headlessly
-- `npm run cypress:a11y` - Run accessibility tests
-
-## Accessibility
-
-This project aims to comply with WCAG 2.1 AA standards. See [Accessibility Guidelines](./docs/accessibility.md) for details about:
-
-- Keyboard navigation
-- Screen reader support
-- Color contrast requirements
-- Focus management
-- Data visualization accessibility patterns
-
-All chart components include:
-- Keyboard navigation for data points
-- Screen reader accessible data tables
-- ARIA attributes
-- Focus indicators
-- Mobile optimization
 
 ## Authentication
 
