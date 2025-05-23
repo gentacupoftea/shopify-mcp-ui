@@ -2,7 +2,7 @@
  * プロフィールページ
  * ユーザープロフィールの表示と編集
  */
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Container,
   Grid,
@@ -20,7 +20,7 @@ import {
   Divider,
   Tab,
   Tabs,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Edit,
   PhotoCamera,
@@ -33,12 +33,12 @@ import {
   VerifiedUser,
   Settings,
   Security,
-} from "@mui/icons-material";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import { mainLayout } from "../../layouts/MainLayout";
-import { Card } from "../../atoms";
-import { formatDate } from "../../utils/format";
+} from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { mainLayout } from '../../layouts/MainLayout';
+import { Card } from '../../atoms';
+import { formatDate } from '../../utils/format';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -49,7 +49,11 @@ interface TabPanelProps {
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
   return (
-    <div role="tabpanel" hidden={value !== index} {...other}>
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      {...other}
+    >
       {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
@@ -61,46 +65,46 @@ const ProfileComponent: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const user = {
-    id: "1",
-    name: "山田太郎",
-    email: "yamada@example.com",
-    phone: "090-1234-5678",
-    role: "Admin",
-    company: "株式会社サンプル",
-    location: "東京都渋谷区",
-    timezone: "Asia/Tokyo",
-    language: "ja",
-    joinedDate: new Date("2023-01-15"),
-    lastLogin: new Date("2024-01-20"),
+    id: '1',
+    name: '山田太郎',
+    email: 'yamada@example.com',
+    phone: '090-1234-5678',
+    role: 'Admin',
+    company: '株式会社サンプル',
+    location: '東京都渋谷区',
+    timezone: 'Asia/Tokyo',
+    language: 'ja',
+    joinedDate: new Date('2023-01-15'),
+    lastLogin: new Date('2024-01-20'),
     avatar: null,
-    bio: "ECサイト運営のプロフェッショナル。10年以上の経験を持ち、複数のブランドの成功に貢献。",
-    skills: ["Eコマース", "マーケティング", "データ分析", "在庫管理"],
+    bio: 'ECサイト運営のプロフェッショナル。10年以上の経験を持ち、複数のブランドの成功に貢献。',
+    skills: ['Eコマース', 'マーケティング', 'データ分析', '在庫管理'],
     achievements: [
-      { id: "1", title: "月間売上1億円達成", date: new Date("2023-06-01") },
-      { id: "2", title: "顧客満足度95%以上", date: new Date("2023-09-01") },
-      { id: "3", title: "ベストセラー商品開発", date: new Date("2023-12-01") },
+      { id: '1', title: '月間売上1億円達成', date: new Date('2023-06-01') },
+      { id: '2', title: '顧客満足度95%以上', date: new Date('2023-09-01') },
+      { id: '3', title: 'ベストセラー商品開発', date: new Date('2023-12-01') },
     ],
   };
 
   const handleEditProfile = () => {
-    navigate("/profile/edit");
+    navigate('/profile/edit');
   };
 
   const renderOverview = () => (
     <Grid container spacing={3}>
       <Grid item xs={12} md={4}>
         <Card>
-          <Box sx={{ textAlign: "center", py: 3 }}>
+          <Box sx={{ textAlign: 'center', py: 3 }}>
             <Badge
               overlap="circular"
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               badgeContent={
                 <IconButton
                   size="small"
                   sx={{
-                    bgcolor: "primary.main",
-                    color: "white",
-                    "&:hover": { bgcolor: "primary.dark" },
+                    bgcolor: 'primary.main',
+                    color: 'white',
+                    '&:hover': { bgcolor: 'primary.dark' },
                   }}
                 >
                   <PhotoCamera fontSize="small" />
@@ -108,7 +112,7 @@ const ProfileComponent: React.FC = () => {
               }
             >
               <Avatar
-                sx={{ width: 120, height: 120, mx: "auto", fontSize: 48 }}
+                sx={{ width: 120, height: 120, mx: 'auto', fontSize: 48 }}
               >
                 {user.name.charAt(0)}
               </Avatar>
@@ -136,25 +140,37 @@ const ProfileComponent: React.FC = () => {
               <ListItemIcon>
                 <Email />
               </ListItemIcon>
-              <ListItemText primary="メールアドレス" secondary={user.email} />
+              <ListItemText
+                primary="メールアドレス"
+                secondary={user.email}
+              />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <Phone />
               </ListItemIcon>
-              <ListItemText primary="電話番号" secondary={user.phone} />
+              <ListItemText
+                primary="電話番号"
+                secondary={user.phone}
+              />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <LocationOn />
               </ListItemIcon>
-              <ListItemText primary="所在地" secondary={user.location} />
+              <ListItemText
+                primary="所在地"
+                secondary={user.location}
+              />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <Business />
               </ListItemIcon>
-              <ListItemText primary="会社" secondary={user.company} />
+              <ListItemText
+                primary="会社"
+                secondary={user.company}
+              />
             </ListItem>
           </List>
         </Card>
@@ -164,16 +180,20 @@ const ProfileComponent: React.FC = () => {
         <Card title="自己紹介">
           <Typography>{user.bio}</Typography>
           <Divider sx={{ my: 3 }} />
-
+          
           <Typography variant="h6" sx={{ mb: 2 }}>
             スキル
           </Typography>
           <Box sx={{ mb: 3 }}>
             {user.skills.map((skill) => (
-              <Chip key={skill} label={skill} sx={{ mr: 1, mb: 1 }} />
+              <Chip
+                key={skill}
+                label={skill}
+                sx={{ mr: 1, mb: 1 }}
+              />
             ))}
           </Box>
-
+          
           <Typography variant="h6" sx={{ mb: 2 }}>
             実績
           </Typography>
@@ -196,16 +216,28 @@ const ProfileComponent: React.FC = () => {
     <Card title="最近のアクティビティ">
       <List>
         <ListItem>
-          <ListItemText primary="新規顧客を追加" secondary="2時間前" />
+          <ListItemText
+            primary="新規顧客を追加"
+            secondary="2時間前"
+          />
         </ListItem>
         <ListItem>
-          <ListItemText primary="月次レポートを生成" secondary="昨日" />
+          <ListItemText
+            primary="月次レポートを生成"
+            secondary="昨日"
+          />
         </ListItem>
         <ListItem>
-          <ListItemText primary="在庫アラートを設定" secondary="3日前" />
+          <ListItemText
+            primary="在庫アラートを設定"
+            secondary="3日前"
+          />
         </ListItem>
         <ListItem>
-          <ListItemText primary="API設定を更新" secondary="1週間前" />
+          <ListItemText
+            primary="API設定を更新"
+            secondary="1週間前"
+          />
         </ListItem>
       </List>
     </Card>
@@ -220,7 +252,10 @@ const ProfileComponent: React.FC = () => {
               <ListItemIcon>
                 <VerifiedUser />
               </ListItemIcon>
-              <ListItemText primary="2段階認証" secondary="有効" />
+              <ListItemText
+                primary="2段階認証"
+                secondary="有効"
+              />
               <Chip label="有効" color="success" size="small" />
             </ListItem>
             <ListItem>
@@ -229,14 +264,17 @@ const ProfileComponent: React.FC = () => {
               </ListItemIcon>
               <ListItemText
                 primary="最終ログイン"
-                secondary={formatDate(user.lastLogin) + " 14:30"}
+                secondary={formatDate(user.lastLogin) + ' 14:30'}
               />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <Security />
               </ListItemIcon>
-              <ListItemText primary="パスワード最終更新" secondary="30日前" />
+              <ListItemText
+                primary="パスワード最終更新"
+                secondary="30日前"
+              />
               <Button size="small">変更</Button>
             </ListItem>
           </List>
@@ -279,7 +317,10 @@ const ProfileComponent: React.FC = () => {
               <ListItemIcon>
                 <Language />
               </ListItemIcon>
-              <ListItemText primary="言語" secondary="日本語" />
+              <ListItemText
+                primary="言語"
+                secondary="日本語"
+              />
               <Button size="small">変更</Button>
             </ListItem>
             <ListItem>
@@ -334,7 +375,7 @@ const ProfileComponent: React.FC = () => {
         <Tabs
           value={activeTab}
           onChange={(e, v) => setActiveTab(v)}
-          sx={{ borderBottom: 1, borderColor: "divider" }}
+          sx={{ borderBottom: 1, borderColor: 'divider' }}
         >
           <Tab label="概要" />
           <Tab label="アクティビティ" />
@@ -360,6 +401,6 @@ const ProfileComponent: React.FC = () => {
 };
 
 // 必要なインポートを追加
-import { Badge, Switch } from "@mui/material";
+import { Badge, Switch } from '@mui/material';
 
 export const Profile = mainLayout(ProfileComponent);

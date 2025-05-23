@@ -2,14 +2,14 @@
  * フォーマットユーティリティ
  * 数値、日付、通貨などのフォーマット関数
  */
-import { format as dateFnsFormat, parseISO } from "date-fns";
-import { ja, enUS } from "date-fns/locale";
+import { format as dateFnsFormat, parseISO } from 'date-fns';
+import { ja, enUS } from 'date-fns/locale';
 
 /**
  * 数値をカンマ区切りでフォーマット
  */
 export const formatNumber = (value: number): string => {
-  return new Intl.NumberFormat("ja-JP").format(value);
+  return new Intl.NumberFormat('ja-JP').format(value);
 };
 
 /**
@@ -24,14 +24,14 @@ export const formatPercent = (value: number, decimals = 1): string => {
  */
 export const formatCurrency = (
   value: number,
-  currency: string = "JPY",
-  locale: string = "ja-JP",
+  currency: string = 'JPY',
+  locale: string = 'ja-JP'
 ): string => {
   return new Intl.NumberFormat(locale, {
-    style: "currency",
+    style: 'currency',
     currency,
-    minimumFractionDigits: currency === "JPY" ? 0 : 2,
-    maximumFractionDigits: currency === "JPY" ? 0 : 2,
+    minimumFractionDigits: currency === 'JPY' ? 0 : 2,
+    maximumFractionDigits: currency === 'JPY' ? 0 : 2,
   }).format(value);
 };
 
@@ -40,12 +40,12 @@ export const formatCurrency = (
  */
 export const formatDate = (
   date: Date | string,
-  formatStr: string = "yyyy/MM/dd",
-  locale: "ja" | "en" = "ja",
+  formatStr: string = 'yyyy/MM/dd',
+  locale: 'ja' | 'en' = 'ja'
 ): string => {
-  const parsedDate = typeof date === "string" ? parseISO(date) : date;
-  const localeObj = locale === "ja" ? ja : enUS;
-
+  const parsedDate = typeof date === 'string' ? parseISO(date) : date;
+  const localeObj = locale === 'ja' ? ja : enUS;
+  
   return dateFnsFormat(parsedDate, formatStr, { locale: localeObj });
 };
 
@@ -54,8 +54,8 @@ export const formatDate = (
  */
 export const formatDateTime = (
   date: Date | string,
-  formatStr: string = "yyyy/MM/dd HH:mm",
-  locale: "ja" | "en" = "ja",
+  formatStr: string = 'yyyy/MM/dd HH:mm',
+  locale: 'ja' | 'en' = 'ja'
 ): string => {
   return formatDate(date, formatStr, locale);
 };
@@ -65,39 +65,59 @@ export const formatDateTime = (
  */
 export const formatRelativeTime = (
   date: Date | string,
-  locale: "ja" | "en" = "ja",
+  locale: 'ja' | 'en' = 'ja'
 ): string => {
-  const parsedDate = typeof date === "string" ? parseISO(date) : date;
+  const parsedDate = typeof date === 'string' ? parseISO(date) : date;
   const now = new Date();
   const diff = now.getTime() - parsedDate.getTime();
-
+  
   const seconds = Math.floor(diff / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
-
-  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
-
-  if (days > 0) return rtf.format(-days, "day");
-  if (hours > 0) return rtf.format(-hours, "hour");
-  if (minutes > 0) return rtf.format(-minutes, "minute");
-  return rtf.format(-seconds, "second");
+  
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+  
+  if (days > 0) return rtf.format(-days, 'day');
+  if (hours > 0) return rtf.format(-hours, 'hour');
+  if (minutes > 0) return rtf.format(-minutes, 'minute');
+  return rtf.format(-seconds, 'second');
 };
 
 /**
  * ファイルサイズのフォーマット
  */
 export const formatFileSize = (bytes: number): string => {
-  const units = ["B", "KB", "MB", "GB", "TB"];
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
   let size = bytes;
   let unitIndex = 0;
-
+  
   while (size >= 1024 && unitIndex < units.length - 1) {
     size /= 1024;
     unitIndex++;
   }
-
+  
   return `${size.toFixed(1)} ${units[unitIndex]}`;
+};
+
+/**
+ * バイト数のフォーマット（formatFileSizeのエイリアス）
+ */
+export const formatBytes = formatFileSize;
+
+/**
+ * 期間のフォーマット（ミリ秒 → 人間可読形式）
+ */
+export const formatDuration = (milliseconds: number): string => {
+  const seconds = Math.floor(milliseconds / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  
+  if (days > 0) return `${days}日`;
+  if (hours > 0) return `${hours}時間`;
+  if (minutes > 0) return `${minutes}分`;
+  return `${seconds}秒`;
 };
 
 /**
@@ -105,9 +125,9 @@ export const formatFileSize = (bytes: number): string => {
  */
 export const getInitials = (name: string): string => {
   return name
-    .split(" ")
+    .split(' ')
     .map((part) => part[0])
-    .join("")
+    .join('')
     .toUpperCase()
     .slice(0, 2);
 };
@@ -117,11 +137,11 @@ export const getInitials = (name: string): string => {
  */
 export const getPlatformName = (platform: string): string => {
   const platformNames: Record<string, string> = {
-    shopify: "Shopify",
-    rakuten: "楽天市場",
-    amazon: "Amazon",
+    shopify: 'Shopify',
+    rakuten: '楽天市場',
+    amazon: 'Amazon',
   };
-
+  
   return platformNames[platform] || platform;
 };
 
@@ -131,22 +151,22 @@ export const getPlatformName = (platform: string): string => {
 export const getStatusLabel = (status: string, type?: string): string => {
   const statusLabels: Record<string, string> = {
     // 共通
-    active: "アクティブ",
-    inactive: "非アクティブ",
-    pending: "保留中",
-    completed: "完了",
-    cancelled: "キャンセル",
-
+    active: 'アクティブ',
+    inactive: '非アクティブ',
+    pending: '保留中',
+    completed: '完了',
+    cancelled: 'キャンセル',
+    
     // 注文
-    processing: "処理中",
-    shipped: "発送済み",
-    delivered: "配達完了",
-
+    processing: '処理中',
+    shipped: '発送済み',
+    delivered: '配達完了',
+    
     // 商品
-    draft: "下書き",
-    published: "公開",
-    archived: "アーカイブ",
+    draft: '下書き',
+    published: '公開',
+    archived: 'アーカイブ',
   };
-
+  
   return statusLabels[status] || status;
 };

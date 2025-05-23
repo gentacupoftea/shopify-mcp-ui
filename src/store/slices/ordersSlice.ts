@@ -1,9 +1,9 @@
 /**
  * 注文状態管理スライス
  */
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { Order, PaginationParams, FilterParams } from "../../types";
-import ordersService from "../../services/ordersService";
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { Order, PaginationParams, FilterParams } from '../../types';
+import ordersService from '../../services/ordersService';
 
 interface OrdersState {
   items: Order[];
@@ -35,7 +35,7 @@ const initialState: OrdersState = {
 
 // 非同期アクション
 export const fetchOrders = createAsyncThunk(
-  "orders/fetchOrders",
+  'orders/fetchOrders',
   async ({
     pagination,
     filters,
@@ -45,35 +45,35 @@ export const fetchOrders = createAsyncThunk(
   }) => {
     const response = await ordersService.getOrders(pagination, filters);
     return response;
-  },
+  }
 );
 
 export const fetchOrderById = createAsyncThunk(
-  "orders/fetchOrderById",
+  'orders/fetchOrderById',
   async (id: string) => {
     const response = await ordersService.getOrderById(id);
     return response;
-  },
+  }
 );
 
 export const updateOrderStatus = createAsyncThunk(
-  "orders/updateOrderStatus",
+  'orders/updateOrderStatus',
   async ({ id, status }: { id: string; status: string }) => {
     const response = await ordersService.updateOrderStatus(id, status);
     return response;
-  },
+  }
 );
 
 export const syncOrders = createAsyncThunk(
-  "orders/syncOrders",
+  'orders/syncOrders',
   async (platform: string) => {
     const response = await ordersService.syncOrders(platform);
     return response;
-  },
+  }
 );
 
 const ordersSlice = createSlice({
-  name: "orders",
+  name: 'orders',
   initialState,
   reducers: {
     setFilters: (state, action: PayloadAction<FilterParams>) => {
@@ -100,7 +100,7 @@ const ordersSlice = createSlice({
       })
       .addCase(fetchOrders.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "注文の取得に失敗しました";
+        state.error = action.error.message || '注文の取得に失敗しました';
       })
       // 注文詳細取得
       .addCase(fetchOrderById.fulfilled, (state, action) => {
@@ -109,7 +109,7 @@ const ordersSlice = createSlice({
       // 注文ステータス更新
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
         const index = state.items.findIndex(
-          (item) => item.id === action.payload.id,
+          (item) => item.id === action.payload.id
         );
         if (index !== -1) {
           state.items[index] = action.payload;
@@ -128,7 +128,7 @@ const ordersSlice = createSlice({
       })
       .addCase(syncOrders.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "注文の同期に失敗しました";
+        state.error = action.error.message || '注文の同期に失敗しました';
       });
   },
 });

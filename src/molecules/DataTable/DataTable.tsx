@@ -2,7 +2,7 @@
  * データテーブルコンポーネント
  * ソート、ページネーション、選択機能を持つ高機能テーブル
  */
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -19,9 +19,9 @@ import {
   MenuItem,
   Box,
   Tooltip,
-} from "@mui/material";
-import { MoreVert, Download, Visibility } from "@mui/icons-material";
-import { Card } from "../../atoms";
+} from '@mui/material';
+import { MoreVert, Download, Visibility } from '@mui/icons-material';
+import { Card } from '../../atoms';
 
 export interface Column<T = any> {
   id: string;
@@ -30,7 +30,7 @@ export interface Column<T = any> {
   format?: (value: any, row: T) => React.ReactNode;
   sortable?: boolean;
   width?: number | string;
-  align?: "left" | "center" | "right";
+  align?: 'left' | 'center' | 'right';
 }
 
 export interface DataTableProps<T = any> {
@@ -51,7 +51,7 @@ export interface DataTableProps<T = any> {
   maxHeight?: number | string;
 }
 
-type Order = "asc" | "desc";
+type Order = 'asc' | 'desc';
 
 export function DataTable<T extends { id: string | number }>({
   columns,
@@ -62,11 +62,11 @@ export function DataTable<T extends { id: string | number }>({
   actions,
   onExport,
   loading = false,
-  emptyMessage = "データがありません",
+  emptyMessage = 'データがありません',
   maxHeight = 600,
 }: DataTableProps<T>) {
-  const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<string>("");
+  const [order, setOrder] = useState<Order>('asc');
+  const [orderBy, setOrderBy] = useState<string>('');
   const [selected, setSelected] = useState<(string | number)[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -76,8 +76,8 @@ export function DataTable<T extends { id: string | number }>({
   }>({ element: null, row: null });
 
   const handleRequestSort = (property: string) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
@@ -92,10 +92,7 @@ export function DataTable<T extends { id: string | number }>({
     onSelectionChange?.([]);
   };
 
-  const handleClick = (
-    event: React.MouseEvent<unknown>,
-    id: string | number,
-  ) => {
+  const handleClick = (event: React.MouseEvent<unknown>, id: string | number) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected: (string | number)[] = [];
 
@@ -108,7 +105,7 @@ export function DataTable<T extends { id: string | number }>({
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selected.slice(selectedIndex + 1)
       );
     }
 
@@ -120,9 +117,7 @@ export function DataTable<T extends { id: string | number }>({
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -141,9 +136,9 @@ export function DataTable<T extends { id: string | number }>({
 
   const getComparator = <Key extends keyof T>(
     order: Order,
-    orderBy: Key,
+    orderBy: Key
   ): ((a: T, b: T) => number) => {
-    return order === "desc"
+    return order === 'desc'
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
   };
@@ -164,7 +159,7 @@ export function DataTable<T extends { id: string | number }>({
 
   const paginatedData = sortedData.slice(
     page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage,
+    page * rowsPerPage + rowsPerPage
   );
 
   return (
@@ -186,9 +181,7 @@ export function DataTable<T extends { id: string | number }>({
                 <TableCell padding="checkbox">
                   <Checkbox
                     color="primary"
-                    indeterminate={
-                      selected.length > 0 && selected.length < data.length
-                    }
+                    indeterminate={selected.length > 0 && selected.length < data.length}
                     checked={data.length > 0 && selected.length === data.length}
                     onChange={handleSelectAllClick}
                   />
@@ -197,14 +190,14 @@ export function DataTable<T extends { id: string | number }>({
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
-                  align={column.align || (column.numeric ? "right" : "left")}
+                  align={column.align || (column.numeric ? 'right' : 'left')}
                   style={{ width: column.width }}
                   sortDirection={orderBy === column.id ? order : false}
                 >
                   {column.sortable !== false ? (
                     <TableSortLabel
                       active={orderBy === column.id}
-                      direction={orderBy === column.id ? order : "asc"}
+                      direction={orderBy === column.id ? order : 'asc'}
                       onClick={() => handleRequestSort(column.id)}
                     >
                       {column.label}
@@ -223,30 +216,27 @@ export function DataTable<T extends { id: string | number }>({
               return (
                 <TableRow
                   hover
-                  onClick={
-                    selectable
-                      ? (event) => handleClick(event, row.id)
-                      : undefined
-                  }
+                  onClick={selectable ? (event) => handleClick(event, row.id) : undefined}
                   role="checkbox"
                   aria-checked={isItemSelected}
                   tabIndex={-1}
                   key={row.id}
                   selected={isItemSelected}
-                  style={{ cursor: selectable ? "pointer" : "default" }}
+                  style={{ cursor: selectable ? 'pointer' : 'default' }}
                 >
                   {selectable && (
                     <TableCell padding="checkbox">
-                      <Checkbox color="primary" checked={isItemSelected} />
+                      <Checkbox
+                        color="primary"
+                        checked={isItemSelected}
+                      />
                     </TableCell>
                   )}
                   {columns.map((column) => {
                     const value = row[column.id as keyof T];
                     return (
                       <TableCell key={column.id} align={column.align}>
-                        {column.format
-                          ? column.format(value, row)
-                          : (value as React.ReactNode)}
+                        {column.format ? column.format(value, row) : value as React.ReactNode}
                       </TableCell>
                     );
                   })}
@@ -264,20 +254,14 @@ export function DataTable<T extends { id: string | number }>({
                           <IconButton
                             size="small"
                             onClick={(e) =>
-                              setActionMenuAnchor({
-                                element: e.currentTarget,
-                                row,
-                              })
+                              setActionMenuAnchor({ element: e.currentTarget, row })
                             }
                           >
                             <MoreVert />
                           </IconButton>
                           <Menu
                             anchorEl={actionMenuAnchor.element}
-                            open={
-                              Boolean(actionMenuAnchor.element) &&
-                              actionMenuAnchor.row?.id === row.id
-                            }
+                            open={Boolean(actionMenuAnchor.element) && actionMenuAnchor.row?.id === row.id}
                             onClose={() =>
                               setActionMenuAnchor({ element: null, row: null })
                             }
@@ -287,14 +271,11 @@ export function DataTable<T extends { id: string | number }>({
                                 key={index}
                                 onClick={() => {
                                   action.onClick(row);
-                                  setActionMenuAnchor({
-                                    element: null,
-                                    row: null,
-                                  });
+                                  setActionMenuAnchor({ element: null, row: null });
                                 }}
                               >
                                 {action.icon && (
-                                  <Box sx={{ mr: 1, display: "flex" }}>
+                                  <Box sx={{ mr: 1, display: 'flex' }}>
                                     {action.icon}
                                   </Box>
                                 )}
@@ -312,13 +293,11 @@ export function DataTable<T extends { id: string | number }>({
             {paginatedData.length === 0 && (
               <TableRow>
                 <TableCell
-                  colSpan={
-                    columns.length + (selectable ? 1 : 0) + (actions ? 1 : 0)
-                  }
+                  colSpan={columns.length + (selectable ? 1 : 0) + (actions ? 1 : 0)}
                   align="center"
                   sx={{ py: 4 }}
                 >
-                  {loading ? "データを読み込み中..." : emptyMessage}
+                  {loading ? 'データを読み込み中...' : emptyMessage}
                 </TableCell>
               </TableRow>
             )}

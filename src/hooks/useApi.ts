@@ -2,15 +2,11 @@
  * APIフック
  * APIリクエストの状態管理とエラーハンドリング
  */
-import { useState, useCallback, useEffect, useRef } from "react";
-import axios, {
-  AxiosRequestConfig,
-  AxiosError,
-  CancelTokenSource,
-} from "axios";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
-import { APIResponse } from "../types";
+import { useState, useCallback, useEffect, useRef } from 'react';
+import axios, { AxiosRequestConfig, AxiosError, CancelTokenSource } from 'axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { APIResponse } from '../types';
 
 interface UseApiOptions extends AxiosRequestConfig {
   manual?: boolean; // 手動実行フラグ
@@ -26,12 +22,12 @@ interface UseApiResult<T> {
 
 export function useApi<T = any>(
   url: string,
-  options: UseApiOptions = {},
+  options: UseApiOptions = {}
 ): UseApiResult<T> {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(!options.manual);
   const [error, setError] = useState<Error | null>(null);
-
+  
   const cancelTokenSource = useRef<CancelTokenSource | null>(null);
   const token = useSelector((state: RootState) => state.auth.token);
 
@@ -42,7 +38,7 @@ export function useApi<T = any>(
 
       // 前のリクエストをキャンセル
       if (cancelTokenSource.current) {
-        cancelTokenSource.current.cancel("Request cancelled");
+        cancelTokenSource.current.cancel('Request cancelled');
       }
 
       // 新しいキャンセルトークンを作成
@@ -55,7 +51,7 @@ export function useApi<T = any>(
           ...overrideConfig,
           url,
           headers: {
-            Authorization: token ? `Bearer ${token}` : "",
+            Authorization: token ? `Bearer ${token}` : '',
             ...options.headers,
             ...overrideConfig?.headers,
           },
@@ -63,21 +59,21 @@ export function useApi<T = any>(
         };
 
         const response = await axios.request<APIResponse<T>>(config);
-
+        
         if (response.data.success && response.data.data) {
           setData(response.data.data);
           return response.data.data;
         } else {
-          throw new Error(response.data.error?.message || "Unknown error");
+          throw new Error(response.data.error?.message || 'Unknown error');
         }
       } catch (err) {
         if (!axios.isCancel(err)) {
           const axiosError = err as AxiosError<APIResponse<T>>;
-          const errorMessage =
+          const errorMessage = 
             axiosError.response?.data?.error?.message ||
             axiosError.message ||
-            "Network error";
-
+            'Network error';
+          
           const error = new Error(errorMessage);
           setError(error);
           throw error;
@@ -87,12 +83,12 @@ export function useApi<T = any>(
         setLoading(false);
       }
     },
-    [url, options, token],
+    [url, options, token]
   );
 
   const cancel = useCallback(() => {
     if (cancelTokenSource.current) {
-      cancelTokenSource.current.cancel("Request cancelled by user");
+      cancelTokenSource.current.cancel('Request cancelled by user');
     }
   }, []);
 

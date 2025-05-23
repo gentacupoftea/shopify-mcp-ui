@@ -1,9 +1,9 @@
 /**
  * 商品状態管理スライス
  */
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { Product, PaginationParams, FilterParams } from "../../types";
-import productsService from "../../services/productsService";
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { Product, PaginationParams, FilterParams } from '../../types';
+import productsService from '../../services/productsService';
 
 interface ProductsState {
   items: Product[];
@@ -35,7 +35,7 @@ const initialState: ProductsState = {
 
 // 非同期アクション
 export const fetchProducts = createAsyncThunk(
-  "products/fetchProducts",
+  'products/fetchProducts',
   async ({
     pagination,
     filters,
@@ -45,43 +45,43 @@ export const fetchProducts = createAsyncThunk(
   }) => {
     const response = await productsService.getProducts(pagination, filters);
     return response;
-  },
+  }
 );
 
 export const fetchProductById = createAsyncThunk(
-  "products/fetchProductById",
+  'products/fetchProductById',
   async (id: string) => {
     const response = await productsService.getProductById(id);
     return response;
-  },
+  }
 );
 
 export const updateProduct = createAsyncThunk(
-  "products/updateProduct",
+  'products/updateProduct',
   async ({ id, data }: { id: string; data: Partial<Product> }) => {
     const response = await productsService.updateProduct(id, data);
     return response;
-  },
+  }
 );
 
 export const deleteProduct = createAsyncThunk(
-  "products/deleteProduct",
+  'products/deleteProduct',
   async (id: string) => {
     await productsService.deleteProduct(id);
     return id;
-  },
+  }
 );
 
 export const syncProducts = createAsyncThunk(
-  "products/syncProducts",
+  'products/syncProducts',
   async (platform: string) => {
     const response = await productsService.syncProducts(platform);
     return response;
-  },
+  }
 );
 
 const productsSlice = createSlice({
-  name: "products",
+  name: 'products',
   initialState,
   reducers: {
     setFilters: (state, action: PayloadAction<FilterParams>) => {
@@ -108,7 +108,7 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "商品の取得に失敗しました";
+        state.error = action.error.message || '商品の取得に失敗しました';
       })
       // 商品詳細取得
       .addCase(fetchProductById.fulfilled, (state, action) => {
@@ -117,7 +117,7 @@ const productsSlice = createSlice({
       // 商品更新
       .addCase(updateProduct.fulfilled, (state, action) => {
         const index = state.items.findIndex(
-          (item) => item.id === action.payload.id,
+          (item) => item.id === action.payload.id
         );
         if (index !== -1) {
           state.items[index] = action.payload;
@@ -143,7 +143,7 @@ const productsSlice = createSlice({
       })
       .addCase(syncProducts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "商品の同期に失敗しました";
+        state.error = action.error.message || '商品の同期に失敗しました';
       });
   },
 });

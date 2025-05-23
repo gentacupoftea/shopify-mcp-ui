@@ -1,7 +1,7 @@
-import React from "react";
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import { useTheme } from "../../hooks";
+import React from 'react';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { useTheme } from '../../hooks';
 
 interface ThemeWrapperProps {
   children: React.ReactNode;
@@ -9,7 +9,7 @@ interface ThemeWrapperProps {
 
 export const ThemeWrapper: React.FC<ThemeWrapperProps> = ({ children }) => {
   const { theme } = useTheme();
-
+  
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

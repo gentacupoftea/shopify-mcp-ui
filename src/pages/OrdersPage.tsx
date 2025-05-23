@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import api from "../services/api";
-import { formatDate, formatCurrency } from "../utils/date";
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import api from '../services/api';
+import { formatDate, formatCurrency } from '../utils/date';
 
 interface Order {
   id: string;
@@ -15,42 +15,37 @@ interface Order {
 
 const OrdersPage: React.FC = () => {
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
-
+  const [search, setSearch] = useState('');
+  
   // Fetch orders data with mock data
   const { data, isLoading } = useQuery({
-    queryKey: ["orders", page, search],
+    queryKey: ['orders', page, search],
     queryFn: async () => {
       // Use mock data while API is not available
-      const mockData = await import("../utils/mockData");
+      const mockData = await import('../utils/mockData');
       const orders = mockData.mockOrders;
-
+      
       // Filter by search
       const filteredOrders = search
-        ? orders.filter(
-            (order) =>
-              order.customer.name
-                .toLowerCase()
-                .includes(search.toLowerCase()) ||
-              order.customer.email
-                .toLowerCase()
-                .includes(search.toLowerCase()) ||
-              order.orderNumber.toLowerCase().includes(search.toLowerCase()),
+        ? orders.filter(order => 
+            order.customer.name.toLowerCase().includes(search.toLowerCase()) ||
+            order.customer.email.toLowerCase().includes(search.toLowerCase()) ||
+            order.orderNumber.toLowerCase().includes(search.toLowerCase())
           )
         : orders;
-
+      
       // Paginate
       const startIndex = (page - 1) * 10;
       const endIndex = startIndex + 10;
       const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
-
+      
       return {
-        orders: paginatedOrders.map((order) => ({
+        orders: paginatedOrders.map(order => ({
           id: order.id,
           name: order.orderNumber,
           email: order.customer.email,
           totalPrice: order.totalAmount,
-          financialStatus: order.status === "delivered" ? "paid" : "pending",
+          financialStatus: order.status === 'delivered' ? 'paid' : 'pending',
           fulfillmentStatus: order.status,
           createdAt: order.createdAt,
         })),
@@ -61,20 +56,18 @@ const OrdersPage: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     const statusStyles: { [key: string]: string } = {
-      paid: "bg-green-100 text-green-800",
-      pending: "bg-yellow-100 text-yellow-800",
-      cancelled: "bg-red-100 text-red-800",
-      fulfilled: "bg-blue-100 text-blue-800",
-      unfulfilled: "bg-gray-100 text-gray-800",
+      paid: 'bg-green-100 text-green-800',
+      pending: 'bg-yellow-100 text-yellow-800',
+      cancelled: 'bg-red-100 text-red-800',
+      fulfilled: 'bg-blue-100 text-blue-800',
+      unfulfilled: 'bg-gray-100 text-gray-800',
     };
 
     const lowerStatus = status.toLowerCase();
     const className = statusStyles[lowerStatus] || statusStyles.unfulfilled;
 
     return (
-      <span
-        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${className}`}
-      >
+      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${className}`}>
         {status}
       </span>
     );
@@ -83,9 +76,7 @@ const OrdersPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
-          Orders
-        </h1>
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Orders</h1>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Manage and track all customer orders
         </p>
@@ -101,7 +92,7 @@ const OrdersPage: React.FC = () => {
             onChange={(e) => setSearch(e.target.value)}
             className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-[#1a1a1a] dark:text-white"
           />
-
+          
           <select className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-[#1a1a1a] dark:text-white">
             <option value="">All statuses</option>
             <option value="paid">Paid</option>
@@ -109,7 +100,7 @@ const OrdersPage: React.FC = () => {
             <option value="cancelled">Cancelled</option>
           </select>
         </div>
-
+        
         <button className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700">
           Export
         </button>
@@ -166,7 +157,7 @@ const OrdersPage: React.FC = () => {
                     {order.email}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {formatDate(order.createdAt, "MMM dd, yyyy")}
+                    {formatDate(order.createdAt, 'MMM dd, yyyy')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {getStatusBadge(order.financialStatus)}
@@ -187,7 +178,7 @@ const OrdersPage: React.FC = () => {
             )}
           </tbody>
         </table>
-
+        
         {/* Pagination */}
         {data && data.totalPages > 1 && (
           <div className="px-6 py-4 flex items-center justify-between border-t border-gray-200 dark:border-gray-700">

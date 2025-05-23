@@ -1,9 +1,9 @@
 /**
  * 認証状態管理スライス
  */
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { User } from "../../types";
-import authService from "../../services/authService";
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { User } from '../../types';
+import authService from '../../services/authService';
 
 interface AuthState {
   user: User | null;
@@ -15,7 +15,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: localStorage.getItem("token"),
+  token: localStorage.getItem('token'),
   isAuthenticated: false,
   loading: false,
   error: null,
@@ -23,29 +23,29 @@ const initialState: AuthState = {
 
 // 非同期アクション
 export const login = createAsyncThunk(
-  "auth/login",
+  'auth/login',
   async ({ email, password }: { email: string; password: string }) => {
     const response = await authService.login(email, password);
-    localStorage.setItem("token", response.token);
+    localStorage.setItem('token', response.token);
     return response;
-  },
+  }
 );
 
-export const logout = createAsyncThunk("auth/logout", async () => {
+export const logout = createAsyncThunk('auth/logout', async () => {
   await authService.logout();
-  localStorage.removeItem("token");
+  localStorage.removeItem('token');
 });
 
 export const fetchCurrentUser = createAsyncThunk(
-  "auth/fetchCurrentUser",
+  'auth/fetchCurrentUser',
   async () => {
     const response = await authService.getCurrentUser();
     return response;
-  },
+  }
 );
 
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
@@ -71,7 +71,7 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "ログインに失敗しました";
+        state.error = action.error.message || 'ログインに失敗しました';
       })
       // ログアウト
       .addCase(logout.fulfilled, (state) => {
@@ -81,14 +81,24 @@ const authSlice = createSlice({
       })
       // 現在のユーザー取得
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {
-        state.user = action.payload;
+        const apiUser = action.payload as any;
+        state.user = {
+          id: apiUser.id,
+          email: apiUser.email,
+          name: apiUser.full_name || apiUser.name || apiUser.email,
+          role: apiUser.is_superuser ? 'admin' as const : 'user' as const,
+          language: 'ja' as const,
+          theme: 'light' as const,
+          permissions: apiUser.permissions || [],
+          lastLogin: new Date()
+        };
         state.isAuthenticated = true;
       })
       .addCase(fetchCurrentUser.rejected, (state) => {
         state.user = null;
         state.isAuthenticated = false;
         state.token = null;
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
       });
   },
 });

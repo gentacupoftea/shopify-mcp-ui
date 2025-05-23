@@ -16,9 +16,8 @@ export const isValidEmail = (email: string): boolean => {
  */
 export const isValidPhoneNumber = (phone: string): boolean => {
   // ハイフンあり・なし両方に対応
-  const phoneRegex =
-    /^(0[0-9]{1,4}-?[0-9]{1,4}-?[0-9]{3,4})|(\+81-?[0-9]{1,4}-?[0-9]{1,4}-?[0-9]{3,4})$/;
-  return phoneRegex.test(phone.replace(/\s/g, ""));
+  const phoneRegex = /^(0[0-9]{1,4}-?[0-9]{1,4}-?[0-9]{3,4})|(\+81-?[0-9]{1,4}-?[0-9]{1,4}-?[0-9]{3,4})$/;
+  return phoneRegex.test(phone.replace(/\s/g, ''));
 };
 
 /**
@@ -44,11 +43,9 @@ export const isValidUrl = (url: string): boolean => {
 /**
  * パスワードの強度チェック
  */
-export const checkPasswordStrength = (
-  password: string,
-): {
+export const checkPasswordStrength = (password: string): {
   score: number;
-  strength: "weak" | "medium" | "strong";
+  strength: 'weak' | 'medium' | 'strong';
   suggestions: string[];
 } => {
   let score = 0;
@@ -57,25 +54,25 @@ export const checkPasswordStrength = (
   // 長さチェック
   if (password.length >= 8) score += 1;
   if (password.length >= 12) score += 1;
-  else suggestions.push("12文字以上にすることを推奨します");
+  else suggestions.push('12文字以上にすることを推奨します');
 
   // 大文字チェック
   if (/[A-Z]/.test(password)) score += 1;
-  else suggestions.push("大文字を含めてください");
+  else suggestions.push('大文字を含めてください');
 
   // 小文字チェック
   if (/[a-z]/.test(password)) score += 1;
-  else suggestions.push("小文字を含めてください");
+  else suggestions.push('小文字を含めてください');
 
   // 数字チェック
   if (/[0-9]/.test(password)) score += 1;
-  else suggestions.push("数字を含めてください");
+  else suggestions.push('数字を含めてください');
 
   // 特殊文字チェック
   if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) score += 1;
-  else suggestions.push("特殊文字を含めてください");
+  else suggestions.push('特殊文字を含めてください');
 
-  const strength = score <= 2 ? "weak" : score <= 4 ? "medium" : "strong";
+  const strength = score <= 2 ? 'weak' : score <= 4 ? 'medium' : 'strong';
 
   return { score, strength, suggestions };
 };
@@ -85,7 +82,7 @@ export const checkPasswordStrength = (
  */
 export const isRequired = (value: any): boolean => {
   if (value === null || value === undefined) return false;
-  if (typeof value === "string") return value.trim().length > 0;
+  if (typeof value === 'string') return value.trim().length > 0;
   if (Array.isArray(value)) return value.length > 0;
   return true;
 };
@@ -117,10 +114,7 @@ export const isValidFileSize = (file: File, maxSizeInMB: number): boolean => {
 /**
  * ファイルタイプのチェック
  */
-export const isValidFileType = (
-  file: File,
-  allowedTypes: string[],
-): boolean => {
+export const isValidFileType = (file: File, allowedTypes: string[]): boolean => {
   return allowedTypes.includes(file.type);
 };
 
@@ -143,29 +137,25 @@ export interface ValidationRule {
  */
 export const validateField = (
   value: any,
-  rules: ValidationRule[],
+  rules: ValidationRule[]
 ): { valid: boolean; errors: string[] } => {
   const errors: string[] = [];
 
   for (const rule of rules) {
     if (rule.required && !isRequired(value)) {
-      errors.push(rule.message || "必須項目です");
+      errors.push(rule.message || '必須項目です');
     }
 
     if (rule.pattern && !rule.pattern.test(value)) {
-      errors.push(rule.message || "形式が正しくありません");
+      errors.push(rule.message || '形式が正しくありません');
     }
 
     if (rule.minLength && value.length < rule.minLength) {
-      errors.push(
-        rule.message || `${rule.minLength}文字以上で入力してください`,
-      );
+      errors.push(rule.message || `${rule.minLength}文字以上で入力してください`);
     }
 
     if (rule.maxLength && value.length > rule.maxLength) {
-      errors.push(
-        rule.message || `${rule.maxLength}文字以下で入力してください`,
-      );
+      errors.push(rule.message || `${rule.maxLength}文字以下で入力してください`);
     }
 
     if (rule.min !== undefined && value < rule.min) {
@@ -178,10 +168,10 @@ export const validateField = (
 
     if (rule.custom) {
       const result = rule.custom(value);
-      if (typeof result === "string") {
+      if (typeof result === 'string') {
         errors.push(result);
       } else if (!result) {
-        errors.push(rule.message || "入力値が正しくありません");
+        errors.push(rule.message || '入力値が正しくありません');
       }
     }
   }

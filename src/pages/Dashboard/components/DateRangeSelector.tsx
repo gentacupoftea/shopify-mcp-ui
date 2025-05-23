@@ -1,7 +1,7 @@
 /**
  * 日付範囲選択コンポーネント
  */
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Button,
   Menu,
@@ -10,10 +10,10 @@ import {
   TextField,
   Divider,
   Typography,
-} from "@mui/material";
-import { CalendarToday, ArrowDropDown } from "@mui/icons-material";
-import { formatDate } from "../../../utils/format";
-import { useTranslation } from "react-i18next";
+} from '@mui/material';
+import { CalendarToday, ArrowDropDown } from '@mui/icons-material';
+import { formatDate } from '../../../utils/format';
+import { useTranslation } from 'react-i18next';
 
 interface DateRangeSelectorProps {
   value: { start: Date; end: Date };
@@ -28,19 +28,19 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
 }) => {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [customStart, setCustomStart] = useState("");
-  const [customEnd, setCustomEnd] = useState("");
+  const [customStart, setCustomStart] = useState('');
+  const [customEnd, setCustomEnd] = useState('');
 
   const presets = [
     {
-      label: t("dashboard.today"),
+      label: t('dashboard.today'),
       getValue: () => {
         const today = new Date();
         return { start: today, end: today };
       },
     },
     {
-      label: t("dashboard.yesterday"),
+      label: t('dashboard.yesterday'),
       getValue: () => {
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
@@ -48,7 +48,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
       },
     },
     {
-      label: t("dashboard.lastWeek"),
+      label: t('dashboard.lastWeek'),
       getValue: () => {
         const end = new Date();
         const start = new Date();
@@ -57,7 +57,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
       },
     },
     {
-      label: t("dashboard.lastMonth"),
+      label: t('dashboard.lastMonth'),
       getValue: () => {
         const end = new Date();
         const start = new Date();
@@ -75,7 +75,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
     setAnchorEl(null);
   };
 
-  const handlePresetClick = (preset: (typeof presets)[0]) => {
+  const handlePresetClick = (preset: typeof presets[0]) => {
     const { start, end } = preset.getValue();
     onChange(start, end);
     handleClose();
@@ -90,9 +90,9 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
 
   const formatRange = () => {
     if (value.start.toDateString() === value.end.toDateString()) {
-      return formatDate(value.start, "yyyy/MM/dd");
+      return formatDate(value.start, 'yyyy/MM/dd');
     }
-    return `${formatDate(value.start, "yyyy/MM/dd")} - ${formatDate(value.end, "yyyy/MM/dd")}`;
+    return `${formatDate(value.start, 'yyyy/MM/dd')} - ${formatDate(value.end, 'yyyy/MM/dd')}`;
   };
 
   return (
@@ -102,9 +102,9 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
         startIcon={startIcon}
         endIcon={<ArrowDropDown />}
         onClick={handleClick}
-        sx={{
-          minWidth: "auto",
-          whiteSpace: "nowrap",
+        sx={{ 
+          minWidth: 'auto',
+          whiteSpace: 'nowrap',
         }}
       >
         {formatRange()}
@@ -114,29 +114,26 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
         open={Boolean(anchorEl)}
         onClose={handleClose}
         PaperProps={{
-          sx: { width: 300, mt: 1 },
+          sx: { width: 300, mt: 1 }
         }}
       >
         {presets.map((preset) => (
-          <MenuItem
-            key={preset.label}
-            onClick={() => handlePresetClick(preset)}
-          >
+          <MenuItem key={preset.label} onClick={() => handlePresetClick(preset)}>
             {preset.label}
           </MenuItem>
         ))}
-
+        
         <Divider sx={{ my: 1 }} />
-
+        
         <Box sx={{ px: 2, py: 1 }}>
           <Typography variant="subtitle2" sx={{ mb: 1 }}>
-            {t("dashboard.customRange")}
+            {t('dashboard.customRange')}
           </Typography>
           <TextField
             fullWidth
             type="date"
             size="small"
-            label={t("dashboard.from")}
+            label={t('dashboard.from')}
             value={customStart}
             onChange={(e) => setCustomStart(e.target.value)}
             InputLabelProps={{ shrink: true }}
@@ -146,7 +143,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
             fullWidth
             type="date"
             size="small"
-            label={t("dashboard.to")}
+            label={t('dashboard.to')}
             value={customEnd}
             onChange={(e) => setCustomEnd(e.target.value)}
             InputLabelProps={{ shrink: true }}
@@ -159,7 +156,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
             onClick={handleCustomApply}
             disabled={!customStart || !customEnd}
           >
-            {t("common.apply")}
+            {t('common.apply')}
           </Button>
         </Box>
       </Menu>

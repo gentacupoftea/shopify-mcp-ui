@@ -1,13 +1,6 @@
-import React from "react";
-import {
-  Box,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Avatar,
-} from "@mui/material";
-import { formatCurrency } from "../../../utils/format";
+import React from 'react';
+import { Box, Typography, List, ListItem, ListItemText, Avatar } from '@mui/material';
+import { formatCurrency } from '../../../utils/format';
 
 interface Product {
   id: string;

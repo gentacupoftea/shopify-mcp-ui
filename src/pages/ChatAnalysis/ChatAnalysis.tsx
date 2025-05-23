@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -22,7 +22,7 @@ import {
   useTheme,
   alpha,
   CircularProgress,
-} from "@mui/material";
+} from '@mui/material';
 import {
   ChatBubbleLeftRightIcon,
   UserIcon,
@@ -33,19 +33,19 @@ import {
   ArrowUturnLeftIcon,
   ChartBarIcon,
   DocumentTextIcon,
-} from "@heroicons/react/24/outline";
-import { useTranslation } from "react-i18next";
-import { mainLayout } from "../../layouts/MainLayout";
-import { SalesChart } from "../Dashboard/components/SalesChart";
-import { DataTable } from "../../molecules/DataTable/DataTable";
+} from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
+import { mainLayout } from '../../layouts/MainLayout';
+import { SalesChart } from '../Dashboard/components/SalesChart';
+import { DataTable } from '../../molecules/DataTable/DataTable';
 
 interface ChatMessage {
   id: string;
-  type: "user" | "ai";
+  type: 'user' | 'ai';
   content: string;
   timestamp: Date;
   data?: any;
-  visualization?: "chart" | "table" | "metrics";
+  visualization?: 'chart' | 'table' | 'metrics';
 }
 
 interface QuickPrompt {
@@ -57,21 +57,21 @@ interface QuickPrompt {
 
 const quickPrompts: QuickPrompt[] = [
   {
-    id: "1",
-    label: "売上推移",
-    prompt: "過去30日間の売上推移を見せて",
+    id: '1',
+    label: '売上推移',
+    prompt: '過去30日間の売上推移を見せて',
     icon: ChartBarIcon,
   },
   {
-    id: "2",
-    label: "トップ商品",
-    prompt: "売れ筋商品トップ10を教えて",
+    id: '2',
+    label: 'トップ商品',
+    prompt: '売れ筋商品トップ10を教えて',
     icon: SparklesIcon,
   },
   {
-    id: "3",
-    label: "プラットフォーム比較",
-    prompt: "各プラットフォームの売上を比較して",
+    id: '3',
+    label: 'プラットフォーム比較',
+    prompt: '各プラットフォームの売上を比較して',
     icon: DocumentTextIcon,
   },
 ];
@@ -80,8 +80,8 @@ const ChatAnalysisComponent: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState("");
-  const [aiModel, setAiModel] = useState("claude");
+  const [input, setInput] = useState('');
+  const [aiModel, setAiModel] = useState('claude');
   const [isLoading, setIsLoading] = useState(false);
   const [showHistory, setShowHistory] = useState(true);
 
@@ -89,21 +89,21 @@ const ChatAnalysisComponent: React.FC = () => {
   useEffect(() => {
     const loadMockData = async () => {
       try {
-        const mockData = await import("../../utils/mockData");
+        const mockData = await import('../../utils/mockData');
         const mockMessages = mockData.mockChatMessages;
-
-        const convertedMessages: ChatMessage[] = mockMessages.map((msg) => ({
+        
+        const convertedMessages: ChatMessage[] = mockMessages.map(msg => ({
           id: msg.id,
-          type: msg.type === "assistant" ? "ai" : "user",
+          type: msg.type === 'assistant' ? 'ai' : 'user',
           content: msg.message,
           timestamp: msg.timestamp,
           data: msg.attachments?.[0]?.data,
           visualization: msg.attachments?.[0]?.type as any,
         }));
-
+        
         setMessages(convertedMessages);
       } catch (error) {
-        console.error("Failed to load mock data:", error);
+        console.error('Failed to load mock data:', error);
       }
     };
     loadMockData();
@@ -114,33 +114,33 @@ const ChatAnalysisComponent: React.FC = () => {
 
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
-      type: "user",
+      type: 'user',
       content: input,
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
     setIsLoading(true);
 
     // AI応答のシミュレーション
     setTimeout(() => {
       const aiMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        type: "ai",
-        content: "過去30日間の売上データを分析しました。",
+        type: 'ai',
+        content: '過去30日間の売上データを分析しました。',
         timestamp: new Date(),
-        visualization: "chart",
+        visualization: 'chart',
         data: [
-          { date: "2024-01-01", amount: 45000 },
-          { date: "2024-01-02", amount: 52000 },
-          { date: "2024-01-03", amount: 48000 },
-          { date: "2024-01-04", amount: 56000 },
-          { date: "2024-01-05", amount: 61000 },
+          { date: '2024-01-01', amount: 45000 },
+          { date: '2024-01-02', amount: 52000 },
+          { date: '2024-01-03', amount: 48000 },
+          { date: '2024-01-04', amount: 56000 },
+          { date: '2024-01-05', amount: 61000 },
         ],
       };
 
-      setMessages((prev) => [...prev, aiMessage]);
+      setMessages(prev => [...prev, aiMessage]);
       setIsLoading(false);
     }, 1500);
   };
@@ -150,7 +150,7 @@ const ChatAnalysisComponent: React.FC = () => {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -160,21 +160,21 @@ const ChatAnalysisComponent: React.FC = () => {
     if (!message.visualization) return null;
 
     switch (message.visualization) {
-      case "chart":
+      case 'chart':
         return (
           <Box sx={{ mt: 2, height: 300 }}>
             <SalesChart data={message.data || []} />
           </Box>
         );
-      case "table":
+      case 'table':
         return (
           <Box sx={{ mt: 2 }}>
             <DataTable
               data={message.data?.items || []}
               columns={[
-                { id: "name", label: "商品名" },
-                { id: "sales", label: "売上" },
-                { id: "quantity", label: "数量" },
+                { id: 'name', label: '商品名' },
+                { id: 'sales', label: '売上' },
+                { id: 'quantity', label: '数量' },
               ]}
             />
           </Box>
@@ -185,50 +185,33 @@ const ChatAnalysisComponent: React.FC = () => {
   };
 
   return (
-    <Grid container spacing={3} sx={{ height: "calc(100vh - 64px)" }}>
+    <Grid container spacing={3} sx={{ height: 'calc(100vh - 64px)' }}>
       {/* チャット履歴サイドバー */}
       {showHistory && (
         <Grid item xs={12} md={3}>
           <Paper
             sx={{
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
               borderRadius: 2,
             }}
           >
-            <Box
-              sx={{ p: 2, borderBottom: `1px solid ${theme.palette.divider}` }}
-            >
-              <Typography variant="h6">
-                {t("chatAnalysis.history.title")}
-              </Typography>
+            <Box sx={{ p: 2, borderBottom: `1px solid ${theme.palette.divider}` }}>
+              <Typography variant="h6">{t('chatAnalysis.history.title')}</Typography>
             </Box>
-            <List sx={{ flex: 1, overflow: "auto", p: 2 }}>
-              <ListItem
-                sx={{
-                  cursor: "pointer",
-                  borderRadius: 1,
-                  "&:hover": {
-                    bgcolor: alpha(theme.palette.primary.main, 0.1),
-                  },
-                }}
-              >
+            <List sx={{ flex: 1, overflow: 'auto', p: 2 }}>
+              <ListItem sx={{ cursor: 'pointer', borderRadius: 1, '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.1) } }}>
                 <ListItemText
                   primary="売上分析 - 2024年1月"
                   secondary="1時間前"
                 />
               </ListItem>
-              <ListItem
-                sx={{
-                  cursor: "pointer",
-                  borderRadius: 1,
-                  "&:hover": {
-                    bgcolor: alpha(theme.palette.primary.main, 0.1),
-                  },
-                }}
-              >
-                <ListItemText primary="在庫レポート" secondary="昨日" />
+              <ListItem sx={{ cursor: 'pointer', borderRadius: 1, '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.1) } }}>
+                <ListItemText
+                  primary="在庫レポート"
+                  secondary="昨日"
+                />
               </ListItem>
             </List>
           </Paper>
@@ -239,9 +222,9 @@ const ChatAnalysisComponent: React.FC = () => {
       <Grid item xs={12} md={showHistory ? 9 : 12}>
         <Paper
           sx={{
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
             borderRadius: 2,
           }}
         >
@@ -250,22 +233,22 @@ const ChatAnalysisComponent: React.FC = () => {
             sx={{
               p: 2,
               borderBottom: `1px solid ${theme.palette.divider}`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <IconButton onClick={() => setShowHistory(!showHistory)}>
                 <ArrowUturnLeftIcon style={{ width: 20, height: 20 }} />
               </IconButton>
-              <Typography variant="h6">{t("chatAnalysis.title")}</Typography>
+              <Typography variant="h6">{t('chatAnalysis.title')}</Typography>
             </Box>
             <FormControl size="small" sx={{ minWidth: 120 }}>
-              <InputLabel>{t("chatAnalysis.aiModel")}</InputLabel>
+              <InputLabel>{t('chatAnalysis.aiModel')}</InputLabel>
               <Select
                 value={aiModel}
-                label={t("chatAnalysis.aiModel")}
+                label={t('chatAnalysis.aiModel')}
                 onChange={(e) => setAiModel(e.target.value)}
               >
                 <MenuItem value="claude">Claude</MenuItem>
@@ -276,9 +259,9 @@ const ChatAnalysisComponent: React.FC = () => {
           </Box>
 
           {/* メッセージエリア */}
-          <Box sx={{ flex: 1, overflow: "auto", p: 3 }}>
+          <Box sx={{ flex: 1, overflow: 'auto', p: 3 }}>
             {messages.length === 0 ? (
-              <Box sx={{ textAlign: "center", py: 5 }}>
+              <Box sx={{ textAlign: 'center', py: 5 }}>
                 <ChatBubbleLeftRightIcon
                   style={{
                     width: 64,
@@ -288,19 +271,12 @@ const ChatAnalysisComponent: React.FC = () => {
                   }}
                 />
                 <Typography variant="h5" color="text.secondary" sx={{ mb: 3 }}>
-                  {t("chatAnalysis.emptyState.title")}
+                  {t('chatAnalysis.emptyState.title')}
                 </Typography>
                 <Typography color="text.secondary" sx={{ mb: 4 }}>
-                  {t("chatAnalysis.emptyState.description")}
+                  {t('chatAnalysis.emptyState.description')}
                 </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 1,
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                  }}
-                >
+                <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
                   {quickPrompts.map((prompt) => (
                     <Chip
                       key={prompt.id}
@@ -308,7 +284,7 @@ const ChatAnalysisComponent: React.FC = () => {
                       icon={<prompt.icon style={{ width: 16, height: 16 }} />}
                       variant="outlined"
                       onClick={() => handleQuickPrompt(prompt.prompt)}
-                      sx={{ cursor: "pointer" }}
+                      sx={{ cursor: 'pointer' }}
                     />
                   ))}
                 </Box>
@@ -319,21 +295,13 @@ const ChatAnalysisComponent: React.FC = () => {
                   <ListItem
                     key={message.id}
                     sx={{
-                      flexDirection: "column",
-                      alignItems:
-                        message.type === "user" ? "flex-end" : "flex-start",
+                      flexDirection: 'column',
+                      alignItems: message.type === 'user' ? 'flex-end' : 'flex-start',
                       mb: 2,
                     }}
                   >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 2,
-                        width: "100%",
-                        maxWidth: 600,
-                      }}
-                    >
-                      {message.type === "ai" && (
+                    <Box sx={{ display: 'flex', gap: 2, width: '100%', maxWidth: 600 }}>
+                      {message.type === 'ai' && (
                         <Avatar sx={{ bgcolor: theme.palette.primary.main }}>
                           <CpuChipIcon style={{ width: 20, height: 20 }} />
                         </Avatar>
@@ -342,10 +310,9 @@ const ChatAnalysisComponent: React.FC = () => {
                         <Paper
                           sx={{
                             p: 2,
-                            bgcolor:
-                              message.type === "user"
-                                ? alpha(theme.palette.primary.main, 0.1)
-                                : theme.palette.background.paper,
+                            bgcolor: message.type === 'user'
+                              ? alpha(theme.palette.primary.main, 0.1)
+                              : theme.palette.background.paper,
                             borderRadius: 2,
                           }}
                         >
@@ -355,12 +322,12 @@ const ChatAnalysisComponent: React.FC = () => {
                         <Typography
                           variant="caption"
                           color="text.secondary"
-                          sx={{ mt: 1, display: "block" }}
+                          sx={{ mt: 1, display: 'block' }}
                         >
                           {message.timestamp.toLocaleTimeString()}
                         </Typography>
                       </Box>
-                      {message.type === "user" && (
+                      {message.type === 'user' && (
                         <Avatar sx={{ bgcolor: theme.palette.secondary.main }}>
                           <UserIcon style={{ width: 20, height: 20 }} />
                         </Avatar>
@@ -370,10 +337,10 @@ const ChatAnalysisComponent: React.FC = () => {
                 ))}
                 {isLoading && (
                   <ListItem>
-                    <Box sx={{ display: "flex", gap: 2 }}>
+                    <Box sx={{ display: 'flex', gap: 2 }}>
                       <CircularProgress size={20} />
                       <Typography color="text.secondary">
-                        {t("chatAnalysis.loading")}
+                        {t('chatAnalysis.loading')}
                       </Typography>
                     </Box>
                   </ListItem>
@@ -384,7 +351,7 @@ const ChatAnalysisComponent: React.FC = () => {
 
           {/* 入力エリア */}
           <Box sx={{ p: 3, borderTop: `1px solid ${theme.palette.divider}` }}>
-            <Box sx={{ display: "flex", gap: 2, alignItems: "flex-end" }}>
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-end' }}>
               <TextField
                 fullWidth
                 multiline
@@ -392,7 +359,7 @@ const ChatAnalysisComponent: React.FC = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder={t("chatAnalysis.input.placeholder")}
+                placeholder={t('chatAnalysis.input.placeholder')}
                 variant="outlined"
                 InputProps={{
                   endAdornment: (
@@ -410,7 +377,7 @@ const ChatAnalysisComponent: React.FC = () => {
                 color="primary"
                 sx={{
                   bgcolor: alpha(theme.palette.primary.main, 0.1),
-                  "&:hover": {
+                  '&:hover': {
                     bgcolor: alpha(theme.palette.primary.main, 0.2),
                   },
                 }}
@@ -419,7 +386,7 @@ const ChatAnalysisComponent: React.FC = () => {
               </IconButton>
             </Box>
             {/* クイックプロンプト */}
-            <Box sx={{ mt: 2, display: "flex", gap: 1, flexWrap: "wrap" }}>
+            <Box sx={{ mt: 2, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
               {quickPrompts.map((prompt) => (
                 <Chip
                   key={prompt.id}
@@ -427,7 +394,7 @@ const ChatAnalysisComponent: React.FC = () => {
                   size="small"
                   icon={<prompt.icon style={{ width: 16, height: 16 }} />}
                   onClick={() => handleQuickPrompt(prompt.prompt)}
-                  sx={{ cursor: "pointer" }}
+                  sx={{ cursor: 'pointer' }}
                 />
               ))}
             </Box>

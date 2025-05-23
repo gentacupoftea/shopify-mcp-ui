@@ -1,68 +1,102 @@
-/**
- * Mock Auth Context for development
- */
-import React, { createContext, useContext, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface User {
   id: string;
   name: string;
   email: string;
-  role?: string;
+  role: string;
   permissions?: string[];
 }
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  loading: boolean;
-  login: (credentials: { email: string; password: string }) => Promise<void>;
-  logout: () => void;
-  register: (email: string, password: string, name: string) => Promise<void>;
-  signup: (data: {
-    email: string;
-    password: string;
-    name?: string;
-  }) => Promise<void>;
-  error: string | null;
   isLoading: boolean;
-  clearError: () => void;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  error: string | null;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  isAuthenticated: false,
+  isLoading: false,
+  login: async () => {},
+  logout: () => {},
+  error: null,
+});
 
-export const MockAuthProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const mockUser: User = {
-    id: "1",
-    name: "テストユーザー",
-    email: "test@example.com",
-    role: "admin",
-    permissions: ["analytics:export", "analytics:view"],
-  };
-
-  const value: AuthContextType = {
-    user: mockUser,
-    isAuthenticated: true,
-    loading: false,
-    login: async () => {},
-    logout: () => {},
-    register: async () => {},
-    signup: async () => {},
-    error: null,
-    isLoading: false,
-    clearError: () => {},
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+// Mock user for development
+const mockUser: User = {
+  id: '1',
+  name: 'Demo User',
+  email: 'demo@conea.ai',
+  role: 'admin',
+  permissions: ['analytics:export', 'read:all', 'write:all', 'admin:all'],
 };
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within a MockAuthProvider");
-  }
-  return context;
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Mock authentication check
+    const checkAuth = async () => {
+      try {
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+          setUser(JSON.parse(savedUser));
+        }
+      } catch (error) {
+        console.error('Authentication error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  const login = async (email: string, password: string) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // Mock login request
+      if (email === 'demo@conea.ai' && password === 'password') {
+        setUser(mockUser);
+        localStorage.setItem('user', JSON.stringify(mockUser));
+      } else {
+        throw new Error('Invalid credentials');
+      }
+    } catch (error) {
+      setError((error as Error).message);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated: !!user,
+        isLoading,
+        login,
+        logout,
+        error,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-export const AuthProvider = MockAuthProvider;
+export const useAuth = () => useContext(AuthContext);

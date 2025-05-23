@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -27,7 +27,7 @@ import {
   FormControl,
   InputLabel,
   Select,
-} from "@mui/material";
+} from '@mui/material';
 import {
   PlusIcon,
   MagnifyingGlassIcon,
@@ -42,11 +42,11 @@ import {
   TableCellsIcon,
   CurrencyDollarIcon,
   UserGroupIcon,
-} from "@heroicons/react/24/outline";
-import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import { mainLayout } from "../../layouts/MainLayout";
+} from '@heroicons/react/24/outline';
+import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { mainLayout } from '../../layouts/MainLayout';
 
 interface Dashboard {
   id: string;
@@ -57,46 +57,46 @@ interface Dashboard {
   updatedAt: Date;
   isFavorite: boolean;
   tags: string[];
-  type: "sales" | "inventory" | "customers" | "analytics";
-  updateFrequency: "realtime" | "daily" | "weekly" | "monthly";
+  type: 'sales' | 'inventory' | 'customers' | 'analytics';
+  updateFrequency: 'realtime' | 'daily' | 'weekly' | 'monthly';
 }
 
 const mockDashboards: Dashboard[] = [
   {
-    id: "1",
-    title: "月間売上レポート",
-    description: "各プラットフォーム別の月間売上推移とトップ商品の分析",
-    thumbnail: "/images/dashboard-thumbnail-1.png",
-    createdAt: new Date("2024-01-15"),
-    updatedAt: new Date("2024-01-20"),
+    id: '1',
+    title: '月間売上レポート',
+    description: '各プラットフォーム別の月間売上推移とトップ商品の分析',
+    thumbnail: '/images/dashboard-thumbnail-1.png',
+    createdAt: new Date('2024-01-15'),
+    updatedAt: new Date('2024-01-20'),
     isFavorite: true,
-    tags: ["売上", "月次", "クロスプラットフォーム"],
-    type: "sales",
-    updateFrequency: "daily",
+    tags: ['売上', '月次', 'クロスプラットフォーム'],
+    type: 'sales',
+    updateFrequency: 'daily',
   },
   {
-    id: "2",
-    title: "在庫管理ダッシュボード",
-    description: "リアルタイムの在庫状況と補充アラート",
-    thumbnail: "/images/dashboard-thumbnail-2.png",
-    createdAt: new Date("2024-01-10"),
-    updatedAt: new Date("2024-01-19"),
+    id: '2',
+    title: '在庫管理ダッシュボード',
+    description: 'リアルタイムの在庫状況と補充アラート',
+    thumbnail: '/images/dashboard-thumbnail-2.png',
+    createdAt: new Date('2024-01-10'),
+    updatedAt: new Date('2024-01-19'),
     isFavorite: false,
-    tags: ["在庫", "アラート", "リアルタイム"],
-    type: "inventory",
-    updateFrequency: "realtime",
+    tags: ['在庫', 'アラート', 'リアルタイム'],
+    type: 'inventory',
+    updateFrequency: 'realtime',
   },
   {
-    id: "3",
-    title: "顧客分析レポート",
-    description: "顧客セグメンテーションとLTV分析",
-    thumbnail: "/images/dashboard-thumbnail-3.png",
-    createdAt: new Date("2024-01-05"),
-    updatedAt: new Date("2024-01-18"),
+    id: '3',
+    title: '顧客分析レポート',
+    description: '顧客セグメンテーションとLTV分析',
+    thumbnail: '/images/dashboard-thumbnail-3.png',
+    createdAt: new Date('2024-01-05'),
+    updatedAt: new Date('2024-01-18'),
     isFavorite: true,
-    tags: ["顧客", "LTV", "セグメント"],
-    type: "customers",
-    updateFrequency: "weekly",
+    tags: ['顧客', 'LTV', 'セグメント'],
+    type: 'customers',
+    updateFrequency: 'weekly',
   },
 ];
 
@@ -105,26 +105,18 @@ const SavedDashboardsComponent: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [dashboards, setDashboards] = useState<Dashboard[]>(mockDashboards);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterTab, setFilterTab] = useState("all");
-  const [selectedDashboard, setSelectedDashboard] = useState<Dashboard | null>(
-    null,
-  );
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterTab, setFilterTab] = useState('all');
+  const [selectedDashboard, setSelectedDashboard] = useState<Dashboard | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
-  const [newDashboardType, setNewDashboardType] = useState("sales");
+  const [newDashboardType, setNewDashboardType] = useState('sales');
 
-  const handleFilterChange = (
-    event: React.SyntheticEvent,
-    newValue: string,
-  ) => {
+  const handleFilterChange = (event: React.SyntheticEvent, newValue: string) => {
     setFilterTab(newValue);
   };
 
-  const handleMenuOpen = (
-    event: React.MouseEvent<HTMLElement>,
-    dashboard: Dashboard,
-  ) => {
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, dashboard: Dashboard) => {
     setAnchorEl(event.currentTarget);
     setSelectedDashboard(dashboard);
   };
@@ -135,27 +127,27 @@ const SavedDashboardsComponent: React.FC = () => {
   };
 
   const handleToggleFavorite = (dashboardId: string) => {
-    setDashboards((prev) =>
-      prev.map((d) =>
-        d.id === dashboardId ? { ...d, isFavorite: !d.isFavorite } : d,
-      ),
+    setDashboards(prev =>
+      prev.map(d =>
+        d.id === dashboardId ? { ...d, isFavorite: !d.isFavorite } : d
+      )
     );
   };
 
   const handleCreateDashboard = () => {
-    navigate("/dashboard/create");
+    navigate('/dashboard/create');
     setCreateDialogOpen(false);
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "sales":
+      case 'sales':
         return <CurrencyDollarIcon style={{ width: 16, height: 16 }} />;
-      case "inventory":
+      case 'inventory':
         return <TableCellsIcon style={{ width: 16, height: 16 }} />;
-      case "customers":
+      case 'customers':
         return <UserGroupIcon style={{ width: 16, height: 16 }} />;
-      case "analytics":
+      case 'analytics':
         return <ChartBarIcon style={{ width: 16, height: 16 }} />;
       default:
         return <ChartBarIcon style={{ width: 16, height: 16 }} />;
@@ -164,30 +156,26 @@ const SavedDashboardsComponent: React.FC = () => {
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case "sales":
+      case 'sales':
         return theme.palette.success.main;
-      case "inventory":
+      case 'inventory':
         return theme.palette.info.main;
-      case "customers":
+      case 'customers':
         return theme.palette.warning.main;
-      case "analytics":
+      case 'analytics':
         return theme.palette.primary.main;
       default:
         return theme.palette.grey[500];
     }
   };
 
-  const filteredDashboards = dashboards.filter((dashboard) => {
-    const matchesSearch =
-      dashboard.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  const filteredDashboards = dashboards.filter(dashboard => {
+    const matchesSearch = dashboard.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       dashboard.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      dashboard.tags.some((tag) =>
-        tag.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
+      dashboard.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    const matchesFilter =
-      filterTab === "all" ||
-      (filterTab === "favorites" && dashboard.isFavorite) ||
+    const matchesFilter = filterTab === 'all' ||
+      (filterTab === 'favorites' && dashboard.isFavorite) ||
       dashboard.type === filterTab;
 
     return matchesSearch && matchesFilter;
@@ -196,25 +184,20 @@ const SavedDashboardsComponent: React.FC = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ mb: 4 }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            mb: 2,
-          }}
-        >
-          <Typography variant="h4">{t("savedDashboards.title")}</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+          <Typography variant="h4">
+            {t('savedDashboards.title')}
+          </Typography>
           <Button
             variant="contained"
             startIcon={<PlusIcon style={{ width: 20, height: 20 }} />}
             onClick={() => setCreateDialogOpen(true)}
           >
-            {t("savedDashboards.create")}
+            {t('savedDashboards.create')}
           </Button>
         </Box>
         <Typography color="text.secondary">
-          {t("savedDashboards.description")}
+          {t('savedDashboards.description')}
         </Typography>
       </Box>
 
@@ -225,7 +208,7 @@ const SavedDashboardsComponent: React.FC = () => {
             <TextField
               fullWidth
               variant="outlined"
-              placeholder={t("savedDashboards.search.placeholder")}
+              placeholder={t('savedDashboards.search.placeholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               InputProps={{
@@ -243,22 +226,16 @@ const SavedDashboardsComponent: React.FC = () => {
               onChange={handleFilterChange}
               aria-label="dashboard filters"
             >
-              <Tab label={t("savedDashboards.filter.all")} value="all" />
+              <Tab label={t('savedDashboards.filter.all')} value="all" />
               <Tab
-                label={t("savedDashboards.filter.favorites")}
+                label={t('savedDashboards.filter.favorites')}
                 value="favorites"
                 icon={<StarIcon style={{ width: 16, height: 16 }} />}
                 iconPosition="start"
               />
-              <Tab label={t("savedDashboards.filter.sales")} value="sales" />
-              <Tab
-                label={t("savedDashboards.filter.inventory")}
-                value="inventory"
-              />
-              <Tab
-                label={t("savedDashboards.filter.customers")}
-                value="customers"
-              />
+              <Tab label={t('savedDashboards.filter.sales')} value="sales" />
+              <Tab label={t('savedDashboards.filter.inventory')} value="inventory" />
+              <Tab label={t('savedDashboards.filter.customers')} value="customers" />
             </Tabs>
           </Grid>
         </Grid>
@@ -270,13 +247,13 @@ const SavedDashboardsComponent: React.FC = () => {
           <Grid item xs={12} sm={6} md={4} key={dashboard.id}>
             <Card
               sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                cursor: "pointer",
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  transform: "translateY(-4px)",
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
                   boxShadow: theme.shadows[8],
                 },
               }}
@@ -287,10 +264,10 @@ const SavedDashboardsComponent: React.FC = () => {
                 height="160"
                 image={dashboard.thumbnail}
                 alt={dashboard.title}
-                sx={{ objectFit: "cover" }}
+                sx={{ objectFit: 'cover' }}
               />
               <CardContent sx={{ flex: 1 }}>
-                <Box sx={{ display: "flex", alignItems: "flex-start", mb: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 1 }}>
                   <Typography variant="h6" sx={{ flex: 1 }}>
                     {dashboard.title}
                   </Typography>
@@ -302,13 +279,7 @@ const SavedDashboardsComponent: React.FC = () => {
                     }}
                   >
                     {dashboard.isFavorite ? (
-                      <StarIconSolid
-                        style={{
-                          width: 20,
-                          height: 20,
-                          color: theme.palette.warning.main,
-                        }}
-                      />
+                      <StarIconSolid style={{ width: 20, height: 20, color: theme.palette.warning.main }} />
                     ) : (
                       <StarIcon style={{ width: 20, height: 20 }} />
                     )}
@@ -321,7 +292,7 @@ const SavedDashboardsComponent: React.FC = () => {
                 >
                   {dashboard.description}
                 </Typography>
-                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mb: 2 }}>
+                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2 }}>
                   <Chip
                     size="small"
                     icon={getTypeIcon(dashboard.type)}
@@ -341,29 +312,20 @@ const SavedDashboardsComponent: React.FC = () => {
                     />
                   ))}
                 </Box>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Typography variant="caption" color="text.secondary">
-                    <ClockIcon
-                      style={{
-                        width: 12,
-                        height: 12,
-                        marginRight: 4,
-                        verticalAlign: "middle",
-                      }}
-                    />
-                    {t("savedDashboards.updatedAt", {
-                      date: dashboard.updatedAt.toLocaleDateString(),
-                    })}
+                    <ClockIcon style={{ width: 12, height: 12, marginRight: 4, verticalAlign: 'middle' }} />
+                    {t('savedDashboards.updatedAt', { date: dashboard.updatedAt.toLocaleDateString() })}
                   </Typography>
                 </Box>
               </CardContent>
               <CardActions>
                 <Button size="small" color="primary">
-                  {t("savedDashboards.view")}
+                  {t('savedDashboards.view')}
                 </Button>
                 <IconButton
                   size="small"
-                  sx={{ ml: "auto" }}
+                  sx={{ ml: 'auto' }}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleMenuOpen(e, dashboard);
@@ -385,64 +347,58 @@ const SavedDashboardsComponent: React.FC = () => {
       >
         <MenuItem onClick={handleMenuClose}>
           <PencilIcon style={{ width: 16, height: 16, marginRight: 8 }} />
-          {t("common.edit")}
+          {t('common.edit')}
         </MenuItem>
         <MenuItem onClick={handleMenuClose}>
           <DuplicateIcon style={{ width: 16, height: 16, marginRight: 8 }} />
-          {t("common.duplicate")}
+          {t('common.duplicate')}
         </MenuItem>
         <MenuItem onClick={handleMenuClose}>
           <ShareIcon style={{ width: 16, height: 16, marginRight: 8 }} />
-          {t("common.share")}
+          {t('common.share')}
         </MenuItem>
-        <MenuItem
-          onClick={handleMenuClose}
-          sx={{ color: theme.palette.error.main }}
-        >
+        <MenuItem onClick={handleMenuClose} sx={{ color: theme.palette.error.main }}>
           <TrashIcon style={{ width: 16, height: 16, marginRight: 8 }} />
-          {t("common.delete")}
+          {t('common.delete')}
         </MenuItem>
       </Menu>
 
       {/* 新規作成ダイアログ */}
-      <Dialog
-        open={createDialogOpen}
-        onClose={() => setCreateDialogOpen(false)}
-      >
-        <DialogTitle>{t("savedDashboards.createDialog.title")}</DialogTitle>
+      <Dialog open={createDialogOpen} onClose={() => setCreateDialogOpen(false)}>
+        <DialogTitle>{t('savedDashboards.createDialog.title')}</DialogTitle>
         <DialogContent>
           <Typography sx={{ mb: 3 }}>
-            {t("savedDashboards.createDialog.description")}
+            {t('savedDashboards.createDialog.description')}
           </Typography>
           <FormControl fullWidth>
-            <InputLabel>{t("savedDashboards.createDialog.type")}</InputLabel>
+            <InputLabel>{t('savedDashboards.createDialog.type')}</InputLabel>
             <Select
               value={newDashboardType}
-              label={t("savedDashboards.createDialog.type")}
+              label={t('savedDashboards.createDialog.type')}
               onChange={(e) => setNewDashboardType(e.target.value)}
             >
               <MenuItem value="sales">
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <CurrencyDollarIcon style={{ width: 20, height: 20 }} />
-                  {t("savedDashboards.types.sales")}
+                  {t('savedDashboards.types.sales')}
                 </Box>
               </MenuItem>
               <MenuItem value="inventory">
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <TableCellsIcon style={{ width: 20, height: 20 }} />
-                  {t("savedDashboards.types.inventory")}
+                  {t('savedDashboards.types.inventory')}
                 </Box>
               </MenuItem>
               <MenuItem value="customers">
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <UserGroupIcon style={{ width: 20, height: 20 }} />
-                  {t("savedDashboards.types.customers")}
+                  {t('savedDashboards.types.customers')}
                 </Box>
               </MenuItem>
               <MenuItem value="analytics">
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <ChartBarIcon style={{ width: 20, height: 20 }} />
-                  {t("savedDashboards.types.analytics")}
+                  {t('savedDashboards.types.analytics')}
                 </Box>
               </MenuItem>
             </Select>
@@ -450,10 +406,10 @@ const SavedDashboardsComponent: React.FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setCreateDialogOpen(false)}>
-            {t("common.cancel")}
+            {t('common.cancel')}
           </Button>
           <Button onClick={handleCreateDashboard} variant="contained">
-            {t("common.create")}
+            {t('common.create')}
           </Button>
         </DialogActions>
       </Dialog>

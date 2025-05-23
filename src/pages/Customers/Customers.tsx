@@ -2,7 +2,7 @@
  * 顧客管理ページ
  * 顧客情報の一覧表示と管理
  */
-import React, { useState, useEffect } from "react";
+import React, { useState } from 'react';
 import {
   Container,
   Grid,
@@ -25,7 +25,7 @@ import {
   ListItem,
   ListItemText,
   Paper,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Add,
   FilterList,
@@ -41,12 +41,12 @@ import {
   Edit,
   Delete,
   Send,
-} from "@mui/icons-material";
-import { useTranslation } from "react-i18next";
-import { mainLayout } from "../../layouts/MainLayout";
-import { DataTable, SearchBar, MetricCard } from "../../molecules";
-import { Card } from "../../atoms";
-import { formatCurrency, formatDate } from "../../utils/format";
+} from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
+import { mainLayout } from '../../layouts/MainLayout';
+import { DataTable, SearchBar, MetricCard } from '../../molecules';
+import { Card } from '../../atoms';
+import { formatCurrency, formatDate } from '../../utils/format';
 
 interface Customer {
   id: string;
@@ -57,7 +57,7 @@ interface Customer {
   totalOrders: number;
   totalSpent: number;
   lastOrderDate: Date;
-  status: "active" | "inactive" | "vip";
+  status: 'active' | 'inactive' | 'vip';
   tags: string[];
   createdAt: Date;
 }
@@ -72,56 +72,59 @@ interface Order {
 
 const CustomersComponent: React.FC = () => {
   const { t } = useTranslation();
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
-    null,
-  );
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [customerDialog, setCustomerDialog] = useState(false);
   const [emailDialog, setEmailDialog] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [customers, setCustomers] = useState<Customer[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  // モックデータを取得
-  useEffect(() => {
-    const loadMockData = async () => {
-      setLoading(true);
-      try {
-        const mockData = await import("../../utils/mockData");
-        const customersData = mockData.mockCustomers.map((c) => ({
-          id: c.id,
-          name: c.name,
-          email: c.email,
-          phone: c.phone,
-          location: `${c.address.state}${c.address.city}`,
-          totalOrders: c.totalOrders,
-          totalSpent: c.totalSpent,
-          lastOrderDate: c.lastOrderAt,
-          status:
-            c.status === "active"
-              ? c.totalSpent > 500000
-                ? "vip"
-                : "active"
-              : ("inactive" as "active" | "inactive" | "vip"),
-          tags: c.tags,
-          createdAt: c.registeredAt,
-        }));
-        setCustomers(customersData);
-      } catch (error) {
-        console.error("Failed to load mock data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadMockData();
-  }, []);
+  const customers: Customer[] = [
+    {
+      id: '1',
+      name: '田中太郎',
+      email: 'tanaka@example.com',
+      phone: '090-1234-5678',
+      location: '東京都渋谷区',
+      totalOrders: 24,
+      totalSpent: 458000,
+      lastOrderDate: new Date('2024-01-18'),
+      status: 'vip',
+      tags: ['リピーター', 'VIP'],
+      createdAt: new Date('2023-01-15'),
+    },
+    {
+      id: '2',
+      name: '佐藤花子',
+      email: 'sato@example.com',
+      location: '大阪府大阪市',
+      totalOrders: 5,
+      totalSpent: 68000,
+      lastOrderDate: new Date('2024-01-10'),
+      status: 'active',
+      tags: ['新規顧客'],
+      createdAt: new Date('2023-12-01'),
+    },
+    {
+      id: '3',
+      name: '鈴木一郎',
+      email: 'suzuki@example.com',
+      phone: '080-9876-5432',
+      location: '愛知県名古屋市',
+      totalOrders: 12,
+      totalSpent: 156000,
+      lastOrderDate: new Date('2023-11-20'),
+      status: 'inactive',
+      tags: ['休眠顧客'],
+      createdAt: new Date('2022-06-10'),
+    },
+  ];
 
   const columns = [
     {
-      id: "name",
-      label: t("customers.name"),
+      id: 'name',
+      label: t('customers.name'),
       format: (value: string, row: Customer) => (
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Avatar sx={{ mr: 2 }}>{value.charAt(0)}</Avatar>
           <Box>
             <Typography variant="body2">{value}</Typography>
@@ -133,28 +136,28 @@ const CustomersComponent: React.FC = () => {
       ),
     },
     {
-      id: "location",
-      label: t("customers.location"),
+      id: 'location',
+      label: t('customers.location'),
     },
     {
-      id: "totalOrders",
-      label: t("customers.orders"),
+      id: 'totalOrders',
+      label: t('customers.orders'),
       numeric: true,
     },
     {
-      id: "totalSpent",
-      label: t("customers.totalSpent"),
+      id: 'totalSpent',
+      label: t('customers.totalSpent'),
       numeric: true,
       format: (value: number) => formatCurrency(value),
     },
     {
-      id: "status",
-      label: t("customers.status"),
+      id: 'status',
+      label: t('customers.status'),
       format: (value: string) => {
         const statusColors: Record<string, any> = {
-          active: "success",
-          inactive: "default",
-          vip: "primary",
+          active: 'success',
+          inactive: 'default',
+          vip: 'primary',
         };
         return (
           <Chip
@@ -166,8 +169,8 @@ const CustomersComponent: React.FC = () => {
       },
     },
     {
-      id: "lastOrderDate",
-      label: t("customers.lastOrder"),
+      id: 'lastOrderDate',
+      label: t('customers.lastOrder'),
       format: (value: Date) => formatDate(value),
     },
   ];
@@ -187,18 +190,18 @@ const CustomersComponent: React.FC = () => {
 
     const customerOrders: Order[] = [
       {
-        id: "1",
-        orderNumber: "#1234",
+        id: '1',
+        orderNumber: '#1234',
         total: 32000,
-        status: "配送完了",
-        createdAt: new Date("2024-01-18"),
+        status: '配送完了',
+        createdAt: new Date('2024-01-18'),
       },
       {
-        id: "2",
-        orderNumber: "#1233",
+        id: '2',
+        orderNumber: '#1233',
         total: 15000,
-        status: "処理中",
-        createdAt: new Date("2024-01-15"),
+        status: '処理中',
+        createdAt: new Date('2024-01-15'),
       },
     ];
 
@@ -289,10 +292,7 @@ const CustomersComponent: React.FC = () => {
                   <Grid item xs={12}>
                     <MetricCard
                       title="平均注文額"
-                      value={
-                        selectedCustomer.totalSpent /
-                        selectedCustomer.totalOrders
-                      }
+                      value={selectedCustomer.totalSpent / selectedCustomer.totalOrders}
                       format="currency"
                     />
                   </Grid>
@@ -306,17 +306,17 @@ const CustomersComponent: React.FC = () => {
           <Box sx={{ mt: 3 }}>
             <DataTable
               columns={[
-                { id: "orderNumber", label: "注文番号" },
+                { id: 'orderNumber', label: '注文番号' },
                 {
-                  id: "total",
-                  label: "金額",
+                  id: 'total',
+                  label: '金額',
                   numeric: true,
                   format: (value: number) => formatCurrency(value),
                 },
-                { id: "status", label: "ステータス" },
+                { id: 'status', label: 'ステータス' },
                 {
-                  id: "createdAt",
-                  label: "注文日",
+                  id: 'createdAt',
+                  label: '注文日',
                   format: (value: Date) => formatDate(value),
                 },
               ]}
@@ -357,24 +357,20 @@ const CustomersComponent: React.FC = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Box
-        sx={{
-          mb: 4,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Box>
           <Typography variant="h4" sx={{ mb: 1 }}>
-            {t("customers.title")}
+            {t('customers.title')}
           </Typography>
           <Typography color="text.secondary">
             {customers.length}名の顧客
           </Typography>
         </Box>
-        <Button variant="contained" startIcon={<Add />}>
-          {t("customers.add")}
+        <Button
+          variant="contained"
+          startIcon={<Add />}
+        >
+          {t('customers.add')}
         </Button>
       </Box>
 
@@ -384,7 +380,7 @@ const CustomersComponent: React.FC = () => {
           <MetricCard
             title="総顧客数"
             value={customers.length}
-            trend={{ value: 5.2, direction: "up" }}
+            trend={{ value: 5.2, direction: 'up' }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
@@ -392,7 +388,7 @@ const CustomersComponent: React.FC = () => {
             title="平均購入額"
             value={227333}
             format="currency"
-            trend={{ value: 3.8, direction: "up" }}
+            trend={{ value: 3.8, direction: 'up' }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
@@ -400,35 +396,37 @@ const CustomersComponent: React.FC = () => {
             title="リピート率"
             value={68}
             format="percent"
-            trend={{ value: 1.2, direction: "up" }}
+            trend={{ value: 1.2, direction: 'up' }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <MetricCard
             title="VIP顧客"
-            value={customers.filter((c) => c.status === "vip").length}
-            subtitle={`全体の${Math.round((customers.filter((c) => c.status === "vip").length / customers.length) * 100)}%`}
+            value={customers.filter(c => c.status === 'vip').length}
+            subtitle={`全体の${Math.round(customers.filter(c => c.status === 'vip').length / customers.length * 100)}%`}
           />
         </Grid>
       </Grid>
 
       {/* 検索とフィルター */}
       <Box sx={{ mb: 3 }}>
-        <SearchBar placeholder={t("customers.search")} showFilters />
+        <SearchBar
+          placeholder={t('customers.search')}
+          showFilters
+        />
       </Box>
 
       {/* 顧客テーブル */}
       <DataTable
         columns={columns}
         data={customers}
-        loading={loading}
         actions={[
           {
-            label: "詳細",
+            label: '詳細',
             onClick: handleViewCustomer,
           },
           {
-            label: "メール",
+            label: 'メール',
             icon: <Email />,
             onClick: handleEmailCustomer,
           },
@@ -443,14 +441,8 @@ const CustomersComponent: React.FC = () => {
         fullWidth
       >
         <DialogTitle>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Avatar sx={{ mr: 2 }}>{selectedCustomer?.name.charAt(0)}</Avatar>
               {selectedCustomer?.name}
             </Box>
@@ -467,10 +459,12 @@ const CustomersComponent: React.FC = () => {
             </Box>
           </Box>
         </DialogTitle>
-        <DialogContent>{renderCustomerDetails()}</DialogContent>
+        <DialogContent>
+          {renderCustomerDetails()}
+        </DialogContent>
         <DialogActions>
           <Button onClick={() => setCustomerDialog(false)}>
-            {t("common.close")}
+            {t('common.close')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -488,17 +482,26 @@ const CustomersComponent: React.FC = () => {
             <TextField
               fullWidth
               label="宛先"
-              value={selectedCustomer?.email || ""}
+              value={selectedCustomer?.email || ''}
               disabled
               sx={{ mb: 2 }}
             />
-            <TextField fullWidth label="件名" sx={{ mb: 2 }} />
-            <TextField fullWidth multiline rows={6} label="本文" />
+            <TextField
+              fullWidth
+              label="件名"
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              multiline
+              rows={6}
+              label="本文"
+            />
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setEmailDialog(false)}>
-            {t("common.cancel")}
+            {t('common.cancel')}
           </Button>
           <Button variant="contained" startIcon={<Send />}>
             送信
